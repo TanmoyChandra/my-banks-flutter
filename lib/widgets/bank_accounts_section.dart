@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
-import 'dart:io';
 
 import '../providers/ui_provider.dart';
 import '../providers/wallet_provider.dart';
@@ -24,60 +23,50 @@ class BankAccountsSection extends StatelessWidget {
         ? uiProvider.userName[0].toUpperCase()
         : '?';
 
-    return SafeArea(
-      bottom: false,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+    return Scaffold(
+      backgroundColor: theme.colorScheme.surface,
+      appBar: AppBar(
+        backgroundColor: theme.colorScheme.surface,
+        elevation: 0,
+        titleSpacing: 24,
+        toolbarHeight: 90,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Bank accounts',
+              style: theme.textTheme.headlineMedium?.copyWith(
+                fontWeight: FontWeight.w700,
+                letterSpacing: -0.5,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              'Keep IFSC and account details easy to find.',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
+        actions: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Bank accounts',
-                        style: theme.textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: -0.5,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        'Keep IFSC and account details easy to find.',
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
-                  ),
+            padding: const EdgeInsets.only(right: 24.0),
+            child: CircleAvatar(
+              radius: 20,
+              backgroundColor: theme.colorScheme.primaryContainer,
+              child: Text(
+                initials,
+                style: TextStyle(
+                  color: theme.colorScheme.onPrimaryContainer,
+                  fontWeight: FontWeight.w700,
                 ),
-                const SizedBox(width: 16),
-                CircleAvatar(
-                  radius: 20,
-                  backgroundColor: theme.colorScheme.primaryContainer,
-                  backgroundImage: uiProvider.userImage != null
-                      ? FileImage(File(uiProvider.userImage!))
-                      : null,
-                  child: uiProvider.userImage == null
-                      ? Text(
-                          initials,
-                          style: TextStyle(
-                            color: theme.colorScheme.onPrimaryContainer,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        )
-                      : null,
-                ),
-              ],
+              ),
             ),
           ),
-          Expanded(
-            child: ListView.builder(
+        ],
+      ),
+      body: ListView.builder(
               padding: const EdgeInsets.only(bottom: 96, top: 16),
               itemCount: accounts.length + 1,
               itemBuilder: (context, index) {
@@ -118,9 +107,6 @@ class BankAccountsSection extends StatelessWidget {
 
                 return _AccountItem(account: accounts[index]);
               },
-            ),
-          ),
-        ],
       ),
     );
   }

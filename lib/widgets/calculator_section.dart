@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'dart:io';
 
 import '../providers/ui_provider.dart';
 
@@ -103,103 +102,93 @@ class _CalculatorSectionState extends State<CalculatorSection> {
         ? uiProvider.userName[0].toUpperCase()
         : '?';
 
-    return SafeArea(
-      bottom: false,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+    return Scaffold(
+      backgroundColor: theme.colorScheme.surface,
+      appBar: AppBar(
+        backgroundColor: theme.colorScheme.surface,
+        elevation: 0,
+        titleSpacing: 24,
+        toolbarHeight: 90,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Calculator',
+              style: theme.textTheme.headlineMedium?.copyWith(
+                fontWeight: FontWeight.w700,
+                letterSpacing: -0.5,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              'Quickly calculate percentages with ease.',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
+        actions: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Calculator',
-                        style: theme.textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: -0.5,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        'Quickly calculate percentages with ease.',
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
-                  ),
+            padding: const EdgeInsets.only(right: 24.0),
+            child: CircleAvatar(
+              radius: 20,
+              backgroundColor: theme.colorScheme.primaryContainer,
+              child: Text(
+                initials,
+                style: TextStyle(
+                  color: theme.colorScheme.onPrimaryContainer,
+                  fontWeight: FontWeight.w700,
                 ),
-                const SizedBox(width: 16),
-                CircleAvatar(
-                  radius: 20,
-                  backgroundColor: theme.colorScheme.primaryContainer,
-                  backgroundImage: uiProvider.userImage != null
-                      ? FileImage(File(uiProvider.userImage!))
-                      : null,
-                  child: uiProvider.userImage == null
-                      ? Text(
-                          initials,
-                          style: TextStyle(
-                            color: theme.colorScheme.onPrimaryContainer,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        )
-                      : null,
-                ),
-              ],
+              ),
             ),
           ),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 16,
-              ).copyWith(bottom: 96),
-              children: [
-                _CalcCard(
-                  icon: Icons.percent,
-                  title: 'What is X% of Y?',
-                  xPlaceholder: 'Enter %',
-                  yPlaceholder: 'Enter value',
-                  separator: '% of',
-                  xController: _c1x,
-                  yController: _c1y,
-                  resultValue: _c1Res,
-                  onCalculate: _handleCalc1,
-                  onCopy: () => _copyToClipboard(_c1Res),
-                ),
-                _CalcCard(
-                  icon: Icons.pie_chart,
-                  title: 'X is what percent of Y?',
-                  xPlaceholder: 'Enter value',
-                  yPlaceholder: 'Enter value',
-                  separator: 'is what % of',
-                  xController: _c2x,
-                  yController: _c2y,
-                  resultValue: _c2Res,
-                  onCalculate: _handleCalc2,
-                  onCopy: () => _copyToClipboard(_c2Res),
-                ),
-                _CalcCard(
-                  icon: Icons.trending_up,
-                  title: 'Percentage Increase / Decrease',
-                  xPlaceholder: 'old value',
-                  yPlaceholder: 'new value',
-                  separator: 'to',
-                  prefixText: 'from',
-                  xController: _c3x,
-                  yController: _c3y,
-                  resultValue: _c3Res,
-                  onCalculate: _handleCalc3,
-                  onCopy: () => _copyToClipboard(_c3Res),
-                ),
-                Card(
+        ],
+      ),
+      body: ListView(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ).copyWith(bottom: 96),
+        children: [
+          _CalcCard(
+            icon: Icons.percent,
+            title: 'What is X% of Y?',
+            xPlaceholder: 'Enter %',
+            yPlaceholder: 'Enter value',
+            separator: '% of',
+            xController: _c1x,
+            yController: _c1y,
+            resultValue: _c1Res,
+            onCalculate: _handleCalc1,
+            onCopy: () => _copyToClipboard(_c1Res),
+          ),
+          _CalcCard(
+            icon: Icons.pie_chart,
+            title: 'X is what percent of Y?',
+            xPlaceholder: 'Enter value',
+            yPlaceholder: 'Enter value',
+            separator: 'is what % of',
+            xController: _c2x,
+            yController: _c2y,
+            resultValue: _c2Res,
+            onCalculate: _handleCalc2,
+            onCopy: () => _copyToClipboard(_c2Res),
+          ),
+          _CalcCard(
+            icon: Icons.trending_up,
+            title: 'Percentage Increase / Decrease',
+            xPlaceholder: 'old value',
+            yPlaceholder: 'new value',
+            separator: 'to',
+            prefixText: 'from',
+            xController: _c3x,
+            yController: _c3y,
+            resultValue: _c3Res,
+            onCalculate: _handleCalc3,
+            onCopy: () => _copyToClipboard(_c3Res),
+          ),
+          Card(
                   margin: const EdgeInsets.only(top: 8),
                   child: Padding(
                     padding: const EdgeInsets.all(16),
@@ -249,9 +238,6 @@ class _CalculatorSectionState extends State<CalculatorSection> {
                 ),
               ),
               ],
-            ),
-          ),
-        ],
       ),
     );
   }

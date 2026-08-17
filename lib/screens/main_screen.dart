@@ -28,7 +28,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
+      body: _SmoothIndexedStack(
         index: _currentIndex,
         children: _tabs,
       ),
@@ -67,6 +67,58 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _SmoothIndexedStack extends StatefulWidget {
+  final int index;
+  final List<Widget> children;
+
+  const _SmoothIndexedStack({
+    required this.index,
+    required this.children,
+  });
+
+  @override
+  State<_SmoothIndexedStack> createState() => _SmoothIndexedStackState();
+}
+
+class _SmoothIndexedStackState extends State<_SmoothIndexedStack> {
+  int _previousIndex = 0;
+
+  @override
+  void didUpdateWidget(_SmoothIndexedStack oldWidget) {
+    if (oldWidget.index != widget.index) {
+      _previousIndex = oldWidget.index;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: List.generate(widget.children.length, (i) {
+        final isCurrent = i == widget.index;
+        final isPrevious = i == _previousIndex;
+        final isOnStage = isCurrent || isPrevious;
+
+        return IgnorePointer(
+          ignoring: !isCurrent,
+          child: AnimatedOpacity(
+            opacity: isCurrent ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            child: Offstage(
+              offstage: !isOnStage,
+              child: TickerMode(
+                enabled: isOnStage,
+                child: widget.children[i],
+              ),
+            ),
+          ),
+        );
+      }),
     );
   }
 }

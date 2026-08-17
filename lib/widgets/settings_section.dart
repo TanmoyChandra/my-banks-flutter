@@ -351,81 +351,78 @@ class _SettingsSectionState extends State<SettingsSection>
         ? uiProvider.userName[0].toUpperCase()
         : '?';
 
-    return SafeArea(
-      bottom: false,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+    return Scaffold(
+      backgroundColor: theme.colorScheme.surface,
+      appBar: AppBar(
+        backgroundColor: theme.colorScheme.surface,
+        elevation: 0,
+        titleSpacing: 24,
+        toolbarHeight: 90,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Settings',
+              style: theme.textTheme.headlineMedium?.copyWith(
+                fontWeight: FontWeight.w700,
+                letterSpacing: -0.5,
+              ),
+            ),
+            if (uiProvider.userName.isNotEmpty) ...[
+              const SizedBox(height: 6),
+              Text(
+                'Hi, ${uiProvider.userName}',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ],
+        ),
+        actions: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+            padding: const EdgeInsets.only(right: 24.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Settings',
-                        style: theme.textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: -0.5,
-                        ),
-                      ),
-                      if (uiProvider.userName.isNotEmpty)
-                        Text(
-                          'Hi, ${uiProvider.userName}',
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                    ],
+                RotationTransition(
+                  turns: Tween(begin: 0.0, end: 0.5).animate(_rotateAnim),
+                  child: IconButton(
+                    icon: Icon(
+                      isDark ? Icons.wb_sunny : Icons.nightlight_round,
+                      color: theme.colorScheme.onPrimaryContainer,
+                    ),
+                    style: IconButton.styleFrom(
+                      backgroundColor: theme.colorScheme.primaryContainer,
+                    ),
+                    onPressed: uiProvider.toggleTheme,
                   ),
                 ),
-                const SizedBox(width: 16),
-                Row(
-                  children: [
-                    RotationTransition(
-                      turns: Tween(begin: 0.0, end: 0.5).animate(_rotateAnim),
-                      child: IconButton(
-                        icon: Icon(
-                          isDark ? Icons.wb_sunny : Icons.nightlight_round,
-                          color: theme.colorScheme.onPrimaryContainer,
-                        ),
-                        style: IconButton.styleFrom(
-                          backgroundColor: theme.colorScheme.primaryContainer,
-                        ),
-                        onPressed: uiProvider.toggleTheme,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    GestureDetector(
-                      onTap: () => _showProfileModal(context, uiProvider),
-                      child: CircleAvatar(
-                        radius: 20,
-                        backgroundColor: theme.colorScheme.primaryContainer,
-                        backgroundImage: uiProvider.userImage != null
-                            ? FileImage(File(uiProvider.userImage!))
-                            : null,
-                        child: uiProvider.userImage == null
-                            ? Text(
-                                initials,
-                                style: TextStyle(
-                                  color: theme.colorScheme.onPrimaryContainer,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              )
-                            : null,
-                      ),
-                    ),
-                  ],
+                const SizedBox(width: 8),
+                GestureDetector(
+                  onTap: () => _showProfileModal(context, uiProvider),
+                  child: CircleAvatar(
+                    radius: 20,
+                    backgroundColor: theme.colorScheme.primaryContainer,
+                    backgroundImage: uiProvider.userImage != null
+                        ? FileImage(File(uiProvider.userImage!))
+                        : null,
+                    child: uiProvider.userImage == null
+                        ? Text(
+                            initials,
+                            style: TextStyle(
+                              color: theme.colorScheme.onPrimaryContainer,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          )
+                        : null,
+                  ),
                 ),
               ],
             ),
           ),
-          Expanded(
-            child: ListView(
+        ],
+      ),
+      body: ListView(
               padding: const EdgeInsets.symmetric(
                 horizontal: 20,
                 vertical: 16,
@@ -602,9 +599,6 @@ class _SettingsSectionState extends State<SettingsSection>
                   ),
                 ),
               ],
-            ),
-          ),
-        ],
       ),
     );
   }
