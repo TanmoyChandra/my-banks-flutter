@@ -37,7 +37,8 @@ class _IconSplashScreen extends StatefulWidget {
   State<_IconSplashScreen> createState() => _IconSplashScreenState();
 }
 
-class _IconSplashScreenState extends State<_IconSplashScreen> with SingleTickerProviderStateMixin {
+class _IconSplashScreenState extends State<_IconSplashScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnim;
   late Animation<double> _scaleAnim;
@@ -51,13 +52,15 @@ class _IconSplashScreenState extends State<_IconSplashScreen> with SingleTickerP
       duration: const Duration(milliseconds: 800),
     );
 
-    _fadeAnim = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
-    );
+    _fadeAnim = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
 
-    _scaleAnim = Tween<double>(begin: 0.85, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.elasticOut),
-    );
+    _scaleAnim = Tween<double>(
+      begin: 0.85,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.elasticOut));
 
     _controller.forward();
 
@@ -85,10 +88,7 @@ class _IconSplashScreenState extends State<_IconSplashScreen> with SingleTickerP
           builder: (context, child) {
             return Opacity(
               opacity: _fadeAnim.value,
-              child: Transform.scale(
-                scale: _scaleAnim.value,
-                child: child,
-              ),
+              child: Transform.scale(scale: _scaleAnim.value, child: child),
             );
           },
           child: Image.asset(
@@ -110,7 +110,8 @@ class _UserEntryScreen extends StatefulWidget {
   State<_UserEntryScreen> createState() => _UserEntryScreenState();
 }
 
-class _UserEntryScreenState extends State<_UserEntryScreen> with SingleTickerProviderStateMixin {
+class _UserEntryScreenState extends State<_UserEntryScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnim;
   late Animation<Offset> _slideAnim;
@@ -124,13 +125,15 @@ class _UserEntryScreenState extends State<_UserEntryScreen> with SingleTickerPro
       duration: const Duration(milliseconds: 600),
     );
 
-    _fadeAnim = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
-    );
+    _fadeAnim = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
 
-    _slideAnim = Tween<Offset>(begin: const Offset(0, 0.05), end: Offset.zero).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-    );
+    _slideAnim = Tween<Offset>(
+      begin: const Offset(0, 0.05),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
 
     _controller.forward();
     _nameController.addListener(() {
@@ -171,7 +174,8 @@ class _UserEntryScreenState extends State<_UserEntryScreen> with SingleTickerPro
             Expanded(
               child: SingleChildScrollView(
                 physics: const ClampingScrollPhysics(),
-                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),
                   child: AnimatedBuilder(
@@ -229,21 +233,31 @@ class _UserEntryScreenState extends State<_UserEntryScreen> with SingleTickerPro
                           decoration: InputDecoration(
                             labelText: 'Your name',
                             hintText: 'Alex Morgan',
-                            labelStyle: const TextStyle(color: Color(0xFF71717A)),
-                            hintStyle: const TextStyle(color: Color(0xFF71717A)),
+                            labelStyle: const TextStyle(
+                              color: Color(0xFF71717A),
+                            ),
+                            hintStyle: const TextStyle(
+                              color: Color(0xFF71717A),
+                            ),
                             filled: true,
                             fillColor: const Color(0xFF1A1A1A),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(16),
-                              borderSide: const BorderSide(color: Color(0xFF3F3F46)),
+                              borderSide: const BorderSide(
+                                color: Color(0xFF3F3F46),
+                              ),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(16),
-                              borderSide: const BorderSide(color: Color(0xFF3F3F46)),
+                              borderSide: const BorderSide(
+                                color: Color(0xFF3F3F46),
+                              ),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(16),
-                              borderSide: const BorderSide(color: Color(0xFFAAEF00)),
+                              borderSide: const BorderSide(
+                                color: Color(0xFFAAEF00),
+                              ),
                             ),
                           ),
                           onSubmitted: (_) => _handleSubmit(),
@@ -257,10 +271,7 @@ class _UserEntryScreenState extends State<_UserEntryScreen> with SingleTickerPro
             AnimatedBuilder(
               animation: _fadeAnim,
               builder: (context, child) {
-                return Opacity(
-                  opacity: _fadeAnim.value,
-                  child: child,
-                );
+                return Opacity(opacity: _fadeAnim.value, child: child);
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -271,7 +282,10 @@ class _UserEntryScreenState extends State<_UserEntryScreen> with SingleTickerPro
                     style: FilledButton.styleFrom(
                       backgroundColor: theme.colorScheme.primaryContainer,
                       foregroundColor: theme.colorScheme.onPrimaryContainer,
-                      disabledBackgroundColor: theme.colorScheme.primaryContainer.withOpacity(0.5),
+                      disabledBackgroundColor: theme
+                          .colorScheme
+                          .primaryContainer
+                          .withValues(alpha: 0.5),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(32),

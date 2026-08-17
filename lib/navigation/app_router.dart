@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import '../providers/ui_provider.dart';
 import '../screens/onboarding_screen.dart';
 
@@ -18,7 +17,9 @@ class AppRouter {
   static GoRouter getRouter(UiProvider uiProvider) {
     return GoRouter(
       navigatorKey: _rootNavigatorKey,
-      initialLocation: uiProvider.hasCompletedOnboarding ? '/main' : '/onboarding',
+      initialLocation: uiProvider.hasCompletedOnboarding
+          ? '/main'
+          : '/onboarding',
       refreshListenable: uiProvider,
       redirect: (context, state) {
         final hasCompleted = uiProvider.hasCompletedOnboarding;

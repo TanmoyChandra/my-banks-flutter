@@ -64,8 +64,13 @@ class _SetupQRScreenState extends State<SetupQRScreen> {
   }
 
   void _handleSave(WalletProvider provider) {
-    if (_upiIdController.text.trim().isEmpty && _qrValueController.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please enter a UPI ID or scan a QR code.')));
+    if (_upiIdController.text.trim().isEmpty &&
+        _qrValueController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter a UPI ID or scan a QR code.'),
+        ),
+      );
       return;
     }
 
@@ -101,7 +106,9 @@ class _SetupQRScreenState extends State<SetupQRScreen> {
 
     try {
       final MobileScannerController controller = MobileScannerController();
-      final BarcodeCapture? capture = await controller.analyzeImage(pickedFile.path);
+      final BarcodeCapture? capture = await controller.analyzeImage(
+        pickedFile.path,
+      );
 
       if (capture != null && capture.barcodes.isNotEmpty) {
         final code = capture.barcodes.first.rawValue;
@@ -129,7 +136,10 @@ class _SetupQRScreenState extends State<SetupQRScreen> {
   }
 
   void _showError(String message) {
-    if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+    if (mounted)
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
   }
 
   void _showBankPicker() {
@@ -137,14 +147,21 @@ class _SetupQRScreenState extends State<SetupQRScreen> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Theme.of(context).colorScheme.surface,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
       builder: (context) => SizedBox(
         height: MediaQuery.of(context).size.height * 0.7,
         child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Text('Select Bank', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
+              child: Text(
+                'Select Bank',
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+              ),
             ),
             Expanded(
               child: ListView.builder(
@@ -161,7 +178,7 @@ class _SetupQRScreenState extends State<SetupQRScreen> {
                   );
                 },
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -178,139 +195,268 @@ class _SetupQRScreenState extends State<SetupQRScreen> {
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       appBar: AppBar(
-        title: const Text('Setup QR Code', style: TextStyle(fontWeight: FontWeight.w900)),
+        title: const Text(
+          'Setup QR Code',
+          style: TextStyle(fontWeight: FontWeight.w900),
+        ),
         backgroundColor: theme.colorScheme.surface,
-        leading: IconButton(icon: const Icon(Icons.close), onPressed: () => context.pop()),
+        leading: IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () => context.pop(),
+        ),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _showForm
-              ? SingleChildScrollView(
-                  padding: const EdgeInsets.all(20),
-                  child: Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 4))],
+          ? SingleChildScrollView(
+              padding: const EdgeInsets.all(20),
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(_editId != null ? 'Edit UPI Entry' : 'New UPI Entry', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                        const SizedBox(height: 20),
-                        TextField(controller: _nameController, decoration: const InputDecoration(labelText: 'Name', border: OutlineInputBorder()), style: const TextStyle(fontSize: 14)),
-                        const SizedBox(height: 12),
-                        GestureDetector(
-                          onTap: _showBankPicker,
-                          child: AbsorbPointer(
-                            child: TextField(
-                              controller: TextEditingController(text: _bankName),
-                              decoration: const InputDecoration(labelText: 'Bank Name', border: OutlineInputBorder(), suffixIcon: Icon(Icons.keyboard_arrow_down)),
-                              style: const TextStyle(fontSize: 14),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        TextField(controller: _upiIdController, decoration: const InputDecoration(labelText: 'UPI ID', border: OutlineInputBorder()), style: const TextStyle(fontSize: 14)),
-                        const SizedBox(height: 12),
-                        TextField(controller: _qrValueController, decoration: const InputDecoration(labelText: 'QR Value', border: OutlineInputBorder()), maxLines: 3, style: const TextStyle(fontSize: 14)),
-                        const SizedBox(height: 12),
-                        TextField(controller: _mobileNumberController, decoration: const InputDecoration(labelText: 'Mobile Number', border: OutlineInputBorder()), keyboardType: TextInputType.phone, style: const TextStyle(fontSize: 14)),
-                        const SizedBox(height: 20),
-                        Row(
-                          children: [
-                            Expanded(child: OutlinedButton(onPressed: _resetForm, child: const Text('Cancel'))),
-                            const SizedBox(width: 12),
-                            Expanded(child: FilledButton(onPressed: () => _handleSave(walletProvider), child: Text(_editId != null ? 'Update' : 'Save'))),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                )
-              : ListView(
-                  padding: const EdgeInsets.all(16),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (entries.isEmpty)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 60, bottom: 20),
-                        child: Column(
-                          children: [
-                            CircleAvatar(radius: 32, backgroundColor: theme.colorScheme.surfaceVariant, child: Icon(Icons.qr_code, size: 32, color: theme.colorScheme.primary)),
-                            const SizedBox(height: 12),
-                            Text('No UPI entries added yet.', style: TextStyle(color: theme.colorScheme.onSurfaceVariant)),
-                          ],
+                    Text(
+                      _editId != null ? 'Edit UPI Entry' : 'New UPI Entry',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: _nameController,
+                      decoration: const InputDecoration(
+                        labelText: 'Name',
+                        border: OutlineInputBorder(),
+                      ),
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                    const SizedBox(height: 12),
+                    GestureDetector(
+                      onTap: _showBankPicker,
+                      child: AbsorbPointer(
+                        child: TextField(
+                          controller: TextEditingController(text: _bankName),
+                          decoration: const InputDecoration(
+                            labelText: 'Bank Name',
+                            border: OutlineInputBorder(),
+                            suffixIcon: Icon(Icons.keyboard_arrow_down),
+                          ),
+                          style: const TextStyle(fontSize: 14),
                         ),
-                      )
-                    else
-                      ...entries.map((entry) {
-                        final bank = findBankByName(entry.bankName);
-                        return Dismissible(
-                          key: Key(entry.id),
-                          direction: DismissDirection.endToStart,
-                          background: Container(
-                            alignment: Alignment.centerRight,
-                            padding: const EdgeInsets.only(right: 20),
-                            color: theme.colorScheme.error,
-                            child: Icon(Icons.delete, color: theme.colorScheme.onError),
-                          ),
-                          onDismissed: (_) => walletProvider.deleteUpi(entry.id),
-                          child: Card(
-                            margin: const EdgeInsets.only(bottom: 12),
-                            elevation: 1,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                            child: ListTile(
-                              leading: bank != null ? Image.asset(bank.symbol, width: 40, height: 40) : const Icon(Icons.qr_code, size: 40),
-                              title: Text(entry.name.isNotEmpty ? entry.name : (entry.bankName.isNotEmpty ? entry.bankName : entry.upiId), style: const TextStyle(fontWeight: FontWeight.bold)),
-                              subtitle: Text(entry.upiId.isNotEmpty ? entry.upiId : entry.qrValue, maxLines: 1, overflow: TextOverflow.ellipsis),
-                              trailing: IconButton(icon: const Icon(Icons.edit), onPressed: () => _handleEdit(entry)),
-                            ),
-                          ),
-                        );
-                      }),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: _upiIdController,
+                      decoration: const InputDecoration(
+                        labelText: 'UPI ID',
+                        border: OutlineInputBorder(),
+                      ),
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: _qrValueController,
+                      decoration: const InputDecoration(
+                        labelText: 'QR Value',
+                        border: OutlineInputBorder(),
+                      ),
+                      maxLines: 3,
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: _mobileNumberController,
+                      decoration: const InputDecoration(
+                        labelText: 'Mobile Number',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.phone,
+                      style: const TextStyle(fontSize: 14),
+                    ),
                     const SizedBox(height: 20),
                     Row(
                       children: [
                         Expanded(
-                          child: GestureDetector(
-                            onTap: _pickAndScan,
-                            child: Container(
-                              height: 100,
-                              decoration: BoxDecoration(color: isDark ? const Color(0xFF2A2A2A) : Colors.white, borderRadius: BorderRadius.circular(12)),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.image, size: 36, color: theme.colorScheme.onSurfaceVariant),
-                                  const SizedBox(height: 8),
-                                  Text('Scan from Gallery', style: TextStyle(color: theme.colorScheme.onSurfaceVariant, fontWeight: FontWeight.w600)),
-                                ],
-                              ),
-                            ),
+                          child: OutlinedButton(
+                            onPressed: _resetForm,
+                            child: const Text('Cancel'),
                           ),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
-                          child: GestureDetector(
-                            onTap: () => setState(() => _showForm = true),
-                            child: Container(
-                              height: 100,
-                              decoration: BoxDecoration(color: isDark ? const Color(0xFF2A2A2A) : Colors.white, borderRadius: BorderRadius.circular(12)),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.edit, size: 36, color: theme.colorScheme.onSurfaceVariant),
-                                  const SizedBox(height: 8),
-                                  Text('Manual Entry', style: TextStyle(color: theme.colorScheme.onSurfaceVariant, fontWeight: FontWeight.w600)),
-                                ],
-                              ),
-                            ),
+                          child: FilledButton(
+                            onPressed: () => _handleSave(walletProvider),
+                            child: Text(_editId != null ? 'Update' : 'Save'),
                           ),
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
+              ),
+            )
+          : ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                if (entries.isEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 60, bottom: 20),
+                    child: Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 32,
+                          backgroundColor:
+                              theme.colorScheme.surfaceContainerHighest,
+                          child: Icon(
+                            Icons.qr_code,
+                            size: 32,
+                            color: theme.colorScheme.primary,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          'No UPI entries added yet.',
+                          style: TextStyle(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                else
+                  ...entries.map((entry) {
+                    final bank = findBankByName(entry.bankName);
+                    return Dismissible(
+                      key: Key(entry.id),
+                      direction: DismissDirection.endToStart,
+                      background: Container(
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.only(right: 20),
+                        color: theme.colorScheme.error,
+                        child: Icon(
+                          Icons.delete,
+                          color: theme.colorScheme.onError,
+                        ),
+                      ),
+                      onDismissed: (_) => walletProvider.deleteUpi(entry.id),
+                      child: Card(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        elevation: 1,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: ListTile(
+                          leading: bank != null
+                              ? Image.asset(bank.symbol, width: 40, height: 40)
+                              : const Icon(Icons.qr_code, size: 40),
+                          title: Text(
+                            entry.name.isNotEmpty
+                                ? entry.name
+                                : (entry.bankName.isNotEmpty
+                                      ? entry.bankName
+                                      : entry.upiId),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          subtitle: Text(
+                            entry.upiId.isNotEmpty
+                                ? entry.upiId
+                                : entry.qrValue,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.edit),
+                            onPressed: () => _handleEdit(entry),
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: _pickAndScan,
+                        child: Container(
+                          height: 100,
+                          decoration: BoxDecoration(
+                            color: isDark
+                                ? const Color(0xFF2A2A2A)
+                                : Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.image,
+                                size: 36,
+                                color: theme.colorScheme.onSurfaceVariant,
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Scan from Gallery',
+                                style: TextStyle(
+                                  color: theme.colorScheme.onSurfaceVariant,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => setState(() => _showForm = true),
+                        child: Container(
+                          height: 100,
+                          decoration: BoxDecoration(
+                            color: isDark
+                                ? const Color(0xFF2A2A2A)
+                                : Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.edit,
+                                size: 36,
+                                color: theme.colorScheme.onSurfaceVariant,
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Manual Entry',
+                                style: TextStyle(
+                                  color: theme.colorScheme.onSurfaceVariant,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
     );
   }
 }

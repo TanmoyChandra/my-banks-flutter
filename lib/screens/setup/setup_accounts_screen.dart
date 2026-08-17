@@ -20,8 +20,10 @@ class _SetupAccountsScreenState extends State<SetupAccountsScreen> {
 
   String _accountType = 'Savings';
   String _bankName = '';
-  final TextEditingController _accountHolderController = TextEditingController();
-  final TextEditingController _accountNumberController = TextEditingController();
+  final TextEditingController _accountHolderController =
+      TextEditingController();
+  final TextEditingController _accountNumberController =
+      TextEditingController();
   final TextEditingController _ifscController = TextEditingController();
   final TextEditingController _branchNameController = TextEditingController();
   String _color = cardColors.first.key;
@@ -64,8 +66,17 @@ class _SetupAccountsScreenState extends State<SetupAccountsScreen> {
   }
 
   void _handleSave(WalletProvider provider) {
-    if (_bankName.trim().isEmpty || _accountHolderController.text.trim().isEmpty || _accountNumberController.text.trim().isEmpty || _ifscController.text.trim().length < 11) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please fill all required fields and ensure IFSC is 11 characters.')));
+    if (_bankName.trim().isEmpty ||
+        _accountHolderController.text.trim().isEmpty ||
+        _accountNumberController.text.trim().isEmpty ||
+        _ifscController.text.trim().length < 11) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Please fill all required fields and ensure IFSC is 11 characters.',
+          ),
+        ),
+      );
       return;
     }
 
@@ -93,14 +104,21 @@ class _SetupAccountsScreenState extends State<SetupAccountsScreen> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Theme.of(context).colorScheme.surface,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
       builder: (context) => SizedBox(
         height: MediaQuery.of(context).size.height * 0.7,
         child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Text('Select Bank', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
+              child: Text(
+                'Select Bank',
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+              ),
             ),
             Expanded(
               child: ListView.builder(
@@ -117,7 +135,7 @@ class _SetupAccountsScreenState extends State<SetupAccountsScreen> {
                   );
                 },
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -134,9 +152,15 @@ class _SetupAccountsScreenState extends State<SetupAccountsScreen> {
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       appBar: AppBar(
-        title: const Text('Setup Bank Account', style: TextStyle(fontWeight: FontWeight.w900)),
+        title: const Text(
+          'Setup Bank Account',
+          style: TextStyle(fontWeight: FontWeight.w900),
+        ),
         backgroundColor: theme.colorScheme.surface,
-        leading: IconButton(icon: const Icon(Icons.close), onPressed: () => context.pop()),
+        leading: IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () => context.pop(),
+        ),
       ),
       body: _showForm
           ? SingleChildScrollView(
@@ -146,12 +170,24 @@ class _SetupAccountsScreenState extends State<SetupAccountsScreen> {
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
                   borderRadius: BorderRadius.circular(16),
-                  boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 4))],
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(_editId != null ? 'Edit Account' : 'New Account', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    Text(
+                      _editId != null ? 'Edit Account' : 'New Account',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     const SizedBox(height: 20),
                     SegmentedButton<String>(
                       segments: const [
@@ -160,16 +196,23 @@ class _SetupAccountsScreenState extends State<SetupAccountsScreen> {
                         ButtonSegment(value: 'Loan', label: Text('Loan')),
                       ],
                       selected: {_accountType},
-                      onSelectionChanged: (set) => setState(() => _accountType = set.first),
+                      onSelectionChanged: (set) =>
+                          setState(() => _accountType = set.first),
                       style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
-                          if (states.contains(WidgetState.selected)) return const Color(0xFFAAEF00);
-                          return Colors.transparent;
-                        }),
-                        foregroundColor: WidgetStateProperty.resolveWith<Color>((states) {
-                          if (states.contains(WidgetState.selected)) return Colors.black;
-                          return theme.colorScheme.onSurface;
-                        }),
+                        backgroundColor: WidgetStateProperty.resolveWith<Color>(
+                          (states) {
+                            if (states.contains(WidgetState.selected))
+                              return const Color(0xFFAAEF00);
+                            return Colors.transparent;
+                          },
+                        ),
+                        foregroundColor: WidgetStateProperty.resolveWith<Color>(
+                          (states) {
+                            if (states.contains(WidgetState.selected))
+                              return Colors.black;
+                            return theme.colorScheme.onSurface;
+                          },
+                        ),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -178,21 +221,63 @@ class _SetupAccountsScreenState extends State<SetupAccountsScreen> {
                       child: AbsorbPointer(
                         child: TextField(
                           controller: TextEditingController(text: _bankName),
-                          decoration: const InputDecoration(labelText: 'Bank Name *', border: OutlineInputBorder(), suffixIcon: Icon(Icons.keyboard_arrow_down)),
+                          decoration: const InputDecoration(
+                            labelText: 'Bank Name *',
+                            border: OutlineInputBorder(),
+                            suffixIcon: Icon(Icons.keyboard_arrow_down),
+                          ),
                           style: const TextStyle(fontSize: 14),
                         ),
                       ),
                     ),
                     const SizedBox(height: 12),
-                    TextField(controller: _accountHolderController, decoration: const InputDecoration(labelText: 'Account Holder Name *', border: OutlineInputBorder()), style: const TextStyle(fontSize: 14)),
+                    TextField(
+                      controller: _accountHolderController,
+                      decoration: const InputDecoration(
+                        labelText: 'Account Holder Name *',
+                        border: OutlineInputBorder(),
+                      ),
+                      style: const TextStyle(fontSize: 14),
+                    ),
                     const SizedBox(height: 12),
-                    TextField(controller: _accountNumberController, decoration: const InputDecoration(labelText: 'Account Number *', border: OutlineInputBorder()), keyboardType: TextInputType.number, style: const TextStyle(fontSize: 14)),
+                    TextField(
+                      controller: _accountNumberController,
+                      decoration: const InputDecoration(
+                        labelText: 'Account Number *',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                      style: const TextStyle(fontSize: 14),
+                    ),
                     const SizedBox(height: 12),
-                    TextField(controller: _ifscController, decoration: const InputDecoration(labelText: 'IFSC Code *', border: OutlineInputBorder()), textCapitalization: TextCapitalization.characters, maxLength: 11, style: const TextStyle(fontSize: 14)),
+                    TextField(
+                      controller: _ifscController,
+                      decoration: const InputDecoration(
+                        labelText: 'IFSC Code *',
+                        border: OutlineInputBorder(),
+                      ),
+                      textCapitalization: TextCapitalization.characters,
+                      maxLength: 11,
+                      style: const TextStyle(fontSize: 14),
+                    ),
                     const SizedBox(height: 12),
-                    TextField(controller: _branchNameController, decoration: const InputDecoration(labelText: 'Branch Name', border: OutlineInputBorder()), style: const TextStyle(fontSize: 14)),
+                    TextField(
+                      controller: _branchNameController,
+                      decoration: const InputDecoration(
+                        labelText: 'Branch Name',
+                        border: OutlineInputBorder(),
+                      ),
+                      style: const TextStyle(fontSize: 14),
+                    ),
                     const SizedBox(height: 20),
-                    Text('Card Color', style: TextStyle(color: theme.colorScheme.onSurfaceVariant, fontSize: 12, fontWeight: FontWeight.w600)),
+                    Text(
+                      'Card Color',
+                      style: TextStyle(
+                        color: theme.colorScheme.onSurfaceVariant,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                     const SizedBox(height: 8),
                     SizedBox(
                       height: 50,
@@ -211,9 +296,20 @@ class _SetupAccountsScreenState extends State<SetupAccountsScreen> {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: c.via,
-                                border: Border.all(color: isSelected ? theme.colorScheme.onSurface : Colors.transparent, width: 2),
+                                border: Border.all(
+                                  color: isSelected
+                                      ? theme.colorScheme.onSurface
+                                      : Colors.transparent,
+                                  width: 2,
+                                ),
                               ),
-                              child: isSelected ? const Icon(Icons.check, color: Colors.white, size: 20) : null,
+                              child: isSelected
+                                  ? const Icon(
+                                      Icons.check,
+                                      color: Colors.white,
+                                      size: 20,
+                                    )
+                                  : null,
                             ),
                           );
                         },
@@ -222,11 +318,21 @@ class _SetupAccountsScreenState extends State<SetupAccountsScreen> {
                     const SizedBox(height: 24),
                     Row(
                       children: [
-                        Expanded(child: OutlinedButton(onPressed: _resetForm, child: const Text('Cancel'))),
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: _resetForm,
+                            child: const Text('Cancel'),
+                          ),
+                        ),
                         const SizedBox(width: 12),
-                        Expanded(child: FilledButton(onPressed: () => _handleSave(walletProvider), child: Text(_editId != null ? 'Update' : 'Save'))),
+                        Expanded(
+                          child: FilledButton(
+                            onPressed: () => _handleSave(walletProvider),
+                            child: Text(_editId != null ? 'Update' : 'Save'),
+                          ),
+                        ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -239,9 +345,23 @@ class _SetupAccountsScreenState extends State<SetupAccountsScreen> {
                     padding: const EdgeInsets.only(top: 60, bottom: 20),
                     child: Column(
                       children: [
-                        CircleAvatar(radius: 32, backgroundColor: theme.colorScheme.surfaceVariant, child: Icon(Icons.account_balance, size: 32, color: theme.colorScheme.primary)),
+                        CircleAvatar(
+                          radius: 32,
+                          backgroundColor:
+                              theme.colorScheme.surfaceContainerHighest,
+                          child: Icon(
+                            Icons.account_balance,
+                            size: 32,
+                            color: theme.colorScheme.primary,
+                          ),
+                        ),
                         const SizedBox(height: 12),
-                        Text('No accounts added yet.', style: TextStyle(color: theme.colorScheme.onSurfaceVariant)),
+                        Text(
+                          'No accounts added yet.',
+                          style: TextStyle(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
                       ],
                     ),
                   )
@@ -255,30 +375,60 @@ class _SetupAccountsScreenState extends State<SetupAccountsScreen> {
                         alignment: Alignment.centerRight,
                         padding: const EdgeInsets.only(right: 20),
                         color: theme.colorScheme.error,
-                        child: Icon(Icons.delete, color: theme.colorScheme.onError),
+                        child: Icon(
+                          Icons.delete,
+                          color: theme.colorScheme.onError,
+                        ),
                       ),
-                      onDismissed: (_) => walletProvider.deleteAccount(account.id),
+                      onDismissed: (_) =>
+                          walletProvider.deleteAccount(account.id),
                       child: Card(
                         margin: const EdgeInsets.only(bottom: 12),
                         elevation: 1,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                         child: ListTile(
-                          leading: bank != null ? Image.asset(bank.symbol, width: 40, height: 40) : const Icon(Icons.account_balance, size: 40),
+                          leading: bank != null
+                              ? Image.asset(bank.symbol, width: 40, height: 40)
+                              : const Icon(Icons.account_balance, size: 40),
                           title: Row(
                             children: [
                               Flexible(
-                                child: Text(account.bankName, style: const TextStyle(fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis),
+                                child: Text(
+                                  account.bankName,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                               const SizedBox(width: 8),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                decoration: BoxDecoration(color: const Color(0xFFAAEF00), borderRadius: BorderRadius.circular(10)),
-                                child: Text(account.accountType.toUpperCase(), style: const TextStyle(color: Colors.black, fontSize: 9, fontWeight: FontWeight.w800)),
-                              )
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFAAEF00),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  account.accountType.toUpperCase(),
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 9,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                           subtitle: Text(account.accountNumber),
-                          trailing: IconButton(icon: const Icon(Icons.edit), onPressed: () => _handleEdit(account)),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.edit),
+                            onPressed: () => _handleEdit(account),
+                          ),
                         ),
                       ),
                     );
@@ -288,13 +438,26 @@ class _SetupAccountsScreenState extends State<SetupAccountsScreen> {
                   onTap: () => setState(() => _showForm = true),
                   child: Container(
                     height: 80,
-                    decoration: BoxDecoration(color: isDark ? const Color(0xFF2A2A2A) : Colors.white, borderRadius: BorderRadius.circular(12)),
+                    decoration: BoxDecoration(
+                      color: isDark ? const Color(0xFF2A2A2A) : Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.add_circle, size: 36, color: theme.colorScheme.onSurfaceVariant),
+                        Icon(
+                          Icons.add_circle,
+                          size: 36,
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
                         const SizedBox(height: 4),
-                        Text('Add Bank Account', style: TextStyle(color: theme.colorScheme.onSurfaceVariant, fontWeight: FontWeight.w600)),
+                        Text(
+                          'Add Bank Account',
+                          style: TextStyle(
+                            color: theme.colorScheme.onSurfaceVariant,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ],
                     ),
                   ),

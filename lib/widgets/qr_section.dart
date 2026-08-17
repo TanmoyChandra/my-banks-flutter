@@ -22,7 +22,8 @@ class QRSection extends StatefulWidget {
   State<QRSection> createState() => _QRSectionState();
 }
 
-class _QRSectionState extends State<QRSection> with SingleTickerProviderStateMixin {
+class _QRSectionState extends State<QRSection>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -45,7 +46,9 @@ class _QRSectionState extends State<QRSection> with SingleTickerProviderStateMix
     final entries = walletProvider.upis;
 
     final insets = MediaQuery.of(context).padding;
-    final String initials = uiProvider.userName.isNotEmpty ? uiProvider.userName[0].toUpperCase() : '?';
+    final String initials = uiProvider.userName.isNotEmpty
+        ? uiProvider.userName[0].toUpperCase()
+        : '?';
 
     return SafeArea(
       bottom: false,
@@ -73,7 +76,9 @@ class _QRSectionState extends State<QRSection> with SingleTickerProviderStateMix
                       Text(
                         'Easily share your QR codes to receive payments from any UPI app.',
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.brightness == Brightness.dark ? const Color(0xFFA1A1AA) : const Color(0xFF52525B),
+                          color: theme.brightness == Brightness.dark
+                              ? const Color(0xFFA1A1AA)
+                              : const Color(0xFF52525B),
                         ),
                       ),
                     ],
@@ -88,7 +93,9 @@ class _QRSectionState extends State<QRSection> with SingleTickerProviderStateMix
                   child: CircleAvatar(
                     radius: 20,
                     backgroundColor: theme.colorScheme.primaryContainer,
-                    backgroundImage: uiProvider.userImage != null ? FileImage(File(uiProvider.userImage!)) : null,
+                    backgroundImage: uiProvider.userImage != null
+                        ? FileImage(File(uiProvider.userImage!))
+                        : null,
                     child: uiProvider.userImage == null
                         ? Text(
                             initials,
@@ -108,7 +115,9 @@ class _QRSectionState extends State<QRSection> with SingleTickerProviderStateMix
             child: Container(
               height: 40,
               decoration: BoxDecoration(
-                color: theme.brightness == Brightness.dark ? const Color(0xFF2A2A2A) : const Color(0xFFF2F2F7),
+                color: theme.brightness == Brightness.dark
+                    ? const Color(0xFF2A2A2A)
+                    : const Color(0xFFF2F2F7),
                 borderRadius: BorderRadius.circular(12),
               ),
               padding: const EdgeInsets.all(4),
@@ -118,14 +127,20 @@ class _QRSectionState extends State<QRSection> with SingleTickerProviderStateMix
                   color: theme.colorScheme.surface,
                   borderRadius: BorderRadius.circular(8),
                   boxShadow: [
-                    BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 4, offset: const Offset(0, 2))
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
                   ],
                 ),
                 indicatorSize: TabBarIndicatorSize.tab,
                 dividerColor: Colors.transparent,
                 labelColor: theme.colorScheme.onSurface,
                 unselectedLabelColor: const Color(0xFF8E8E93),
-                labelStyle: theme.textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w700),
+                labelStyle: theme.textTheme.labelLarge?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
                 unselectedLabelStyle: theme.textTheme.labelLarge,
                 tabs: const [
                   Tab(
@@ -134,7 +149,13 @@ class _QRSectionState extends State<QRSection> with SingleTickerProviderStateMix
                       children: [
                         Icon(Icons.qr_code, size: 16),
                         SizedBox(width: 4),
-                        Flexible(child: Text('My UPI/QRs', overflow: TextOverflow.ellipsis, maxLines: 1)),
+                        Flexible(
+                          child: Text(
+                            'My UPI/QRs',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -144,7 +165,13 @@ class _QRSectionState extends State<QRSection> with SingleTickerProviderStateMix
                       children: [
                         Icon(Icons.storefront_outlined, size: 16),
                         SizedBox(width: 4),
-                        Flexible(child: Text('Merchant QRs', overflow: TextOverflow.ellipsis, maxLines: 1)),
+                        Flexible(
+                          child: Text(
+                            'Merchant QRs',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -176,7 +203,7 @@ class _MyQRCodes extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final cardWidth = (screenWidth - 48 - 12).clamp(0.0, 450.0);
-    
+
     return ListView.builder(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.only(left: 24, right: 12),
@@ -191,7 +218,9 @@ class _MyQRCodes extends StatelessWidget {
               child: Container(
                 width: cardWidth,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).brightness == Brightness.dark ? const Color(0xFF2A2A2A) : Colors.white,
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? const Color(0xFF2A2A2A)
+                      : Colors.white,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Center(
@@ -201,7 +230,11 @@ class _MyQRCodes extends StatelessWidget {
                       CircleAvatar(
                         radius: 32,
                         backgroundColor: Colors.transparent,
-                        child: Icon(Icons.add, size: 32, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                        child: Icon(
+                          Icons.add,
+                          size: 32,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
                       ),
                       const SizedBox(height: 16),
                       Text(
@@ -210,7 +243,7 @@ class _MyQRCodes extends StatelessWidget {
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                           fontWeight: FontWeight.w600,
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -244,14 +277,20 @@ class _QRPayCardState extends State<_QRPayCard> {
     if (widget.entry.upiId.isNotEmpty) {
       await Clipboard.setData(ClipboardData(text: widget.entry.upiId));
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('UPI ID copied to clipboard'), duration: Duration(seconds: 1)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('UPI ID copied to clipboard'),
+            duration: Duration(seconds: 1),
+          ),
+        );
       }
     }
   }
 
   Future<void> _handleShare() async {
     try {
-      final boundary = _qrKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+      final boundary =
+          _qrKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
       final image = await boundary.toImage(pixelRatio: 2.0);
       final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
       final pngBytes = byteData!.buffer.asUint8List();
@@ -260,12 +299,15 @@ class _QRPayCardState extends State<_QRPayCard> {
       final file = await File('${tempDir.path}/qr_code.png').create();
       await file.writeAsBytes(pngBytes);
 
-      final title = widget.entry.name.isNotEmpty ? widget.entry.name : (widget.entry.bankName.isNotEmpty ? widget.entry.bankName : widget.entry.upiId);
-      
-      await Share.shareXFiles(
-        [XFile(file.path)],
-        subject: 'Share $title QR Code',
-      );
+      final title = widget.entry.name.isNotEmpty
+          ? widget.entry.name
+          : (widget.entry.bankName.isNotEmpty
+                ? widget.entry.bankName
+                : widget.entry.upiId);
+
+      await Share.shareXFiles([
+        XFile(file.path),
+      ], subject: 'Share $title QR Code');
     } catch (e) {
       // print('Error sharing QR: $e');
     }
@@ -274,8 +316,14 @@ class _QRPayCardState extends State<_QRPayCard> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final title = widget.entry.name.isNotEmpty ? widget.entry.name : (widget.entry.bankName.isNotEmpty ? widget.entry.bankName : widget.entry.upiId);
-    final upiLink = widget.entry.qrValue.isNotEmpty ? widget.entry.qrValue : 'upi://pay?pa=${widget.entry.upiId}&pn=${Uri.encodeComponent(title)}&cu=INR';
+    final title = widget.entry.name.isNotEmpty
+        ? widget.entry.name
+        : (widget.entry.bankName.isNotEmpty
+              ? widget.entry.bankName
+              : widget.entry.upiId);
+    final upiLink = widget.entry.qrValue.isNotEmpty
+        ? widget.entry.qrValue
+        : 'upi://pay?pa=${widget.entry.upiId}&pn=${Uri.encodeComponent(title)}&cu=INR';
     final qrSize = (widget.width - 92).clamp(0.0, 180.0);
     final bank = findBankByName(widget.entry.bankName);
 
@@ -289,7 +337,7 @@ class _QRPayCardState extends State<_QRPayCard> {
               width: widget.width,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 32),
               decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceVariant,
+                color: theme.colorScheme.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: theme.colorScheme.outlineVariant),
               ),
@@ -334,15 +382,29 @@ class _QRPayCardState extends State<_QRPayCard> {
                         ),
                         alignment: Alignment.center,
                         child: bank != null
-                            ? Image.asset(bank.symbol, height: 22, fit: BoxFit.contain)
+                            ? Image.asset(
+                                bank.symbol,
+                                height: 22,
+                                fit: BoxFit.contain,
+                              )
                             : Text(
-                                (widget.entry.bankName.isNotEmpty ? widget.entry.bankName : title).substring(0, 2).toUpperCase(),
-                                style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w800, fontSize: 12),
+                                (widget.entry.bankName.isNotEmpty
+                                        ? widget.entry.bankName
+                                        : title)
+                                    .substring(0, 2)
+                                    .toUpperCase(),
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 12,
+                                ),
                               ),
                       ),
                       Flexible(
                         child: Text(
-                          widget.entry.bankName.isNotEmpty ? widget.entry.bankName : 'Bank not detected',
+                          widget.entry.bankName.isNotEmpty
+                              ? widget.entry.bankName
+                              : 'Bank not detected',
                           style: theme.textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w600,
                             fontSize: 15,
@@ -350,7 +412,7 @@ class _QRPayCardState extends State<_QRPayCard> {
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
-                      )
+                      ),
                     ],
                   ),
                   const SizedBox(height: 23),
@@ -369,7 +431,9 @@ class _QRPayCardState extends State<_QRPayCard> {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          widget.entry.upiId.isNotEmpty ? widget.entry.upiId : 'Not found',
+                          widget.entry.upiId.isNotEmpty
+                              ? widget.entry.upiId
+                              : 'Not found',
                           style: theme.textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w700,
                             color: theme.colorScheme.onSurface,
@@ -378,7 +442,7 @@ class _QRPayCardState extends State<_QRPayCard> {
                         ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

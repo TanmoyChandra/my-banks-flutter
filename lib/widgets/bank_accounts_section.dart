@@ -20,7 +20,9 @@ class BankAccountsSection extends StatelessWidget {
     final uiProvider = context.watch<UiProvider>();
     final walletProvider = context.watch<WalletProvider>();
     final accounts = walletProvider.accounts;
-    final initials = uiProvider.userName.isNotEmpty ? uiProvider.userName[0].toUpperCase() : '?';
+    final initials = uiProvider.userName.isNotEmpty
+        ? uiProvider.userName[0].toUpperCase()
+        : '?';
 
     return SafeArea(
       bottom: false,
@@ -48,7 +50,9 @@ class BankAccountsSection extends StatelessWidget {
                       Text(
                         'Keep IFSC and account details easy to find.',
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.brightness == Brightness.dark ? const Color(0xFFA1A1AA) : const Color(0xFF52525B),
+                          color: theme.brightness == Brightness.dark
+                              ? const Color(0xFFA1A1AA)
+                              : const Color(0xFF52525B),
                         ),
                       ),
                     ],
@@ -58,7 +62,9 @@ class BankAccountsSection extends StatelessWidget {
                 CircleAvatar(
                   radius: 20,
                   backgroundColor: theme.colorScheme.primaryContainer,
-                  backgroundImage: uiProvider.userImage != null ? FileImage(File(uiProvider.userImage!)) : null,
+                  backgroundImage: uiProvider.userImage != null
+                      ? FileImage(File(uiProvider.userImage!))
+                      : null,
                   child: uiProvider.userImage == null
                       ? Text(
                           initials,
@@ -79,13 +85,18 @@ class BankAccountsSection extends StatelessWidget {
               itemBuilder: (context, index) {
                 if (index == accounts.length) {
                   return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
                     child: GestureDetector(
                       onTap: () => context.push('/main/setup-accounts'),
                       child: Container(
                         height: 120,
                         decoration: BoxDecoration(
-                          color: theme.brightness == Brightness.dark ? const Color(0xFF2A2A2A) : Colors.white,
+                          color: theme.brightness == Brightness.dark
+                              ? const Color(0xFF2A2A2A)
+                              : Colors.white,
                           borderRadius: BorderRadius.circular(24),
                         ),
                         child: Center(
@@ -95,7 +106,11 @@ class BankAccountsSection extends StatelessWidget {
                               CircleAvatar(
                                 radius: 24,
                                 backgroundColor: Colors.transparent,
-                                child: Icon(Icons.add, size: 32, color: theme.colorScheme.onSurfaceVariant),
+                                child: Icon(
+                                  Icons.add,
+                                  size: 32,
+                                  color: theme.colorScheme.onSurfaceVariant,
+                                ),
                               ),
                               const SizedBox(height: 8),
                               Text(
@@ -104,7 +119,7 @@ class BankAccountsSection extends StatelessWidget {
                                   color: theme.colorScheme.onSurfaceVariant,
                                   fontWeight: FontWeight.w600,
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
@@ -132,19 +147,26 @@ class _AccountItem extends StatefulWidget {
   State<_AccountItem> createState() => _AccountItemState();
 }
 
-class _AccountItemState extends State<_AccountItem> with SingleTickerProviderStateMixin {
+class _AccountItemState extends State<_AccountItem>
+    with SingleTickerProviderStateMixin {
   bool _expanded = false;
 
   Future<void> _handleCopy(String text) async {
     if (text.isEmpty) return;
     await Clipboard.setData(ClipboardData(text: text));
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Copied to clipboard'), duration: Duration(seconds: 1)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Copied to clipboard'),
+          duration: Duration(seconds: 1),
+        ),
+      );
     }
   }
 
   Future<void> _handleShare() async {
-    final message = 'Bank Account Details\nBank: ${widget.account.bankName}\nHolder: ${widget.account.accountHolder}\nA/C: ${widget.account.accountNumber}\nIFSC: ${widget.account.ifsc}\nType: ${widget.account.accountType}\nBranch: ${widget.account.branchName}';
+    final message =
+        'Bank Account Details\nBank: ${widget.account.bankName}\nHolder: ${widget.account.accountHolder}\nA/C: ${widget.account.accountNumber}\nIFSC: ${widget.account.ifsc}\nType: ${widget.account.accountType}\nBranch: ${widget.account.branchName}';
     try {
       await Share.share(message);
     } catch (e) {
@@ -177,17 +199,27 @@ class _AccountItemState extends State<_AccountItem> with SingleTickerProviderSta
           child: Stack(
             children: [
               Positioned(
-                right: -35, top: -35,
+                right: -35,
+                top: -35,
                 child: Container(
-                  width: 140, height: 140,
-                  decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white.withOpacity(0.07)),
+                  width: 140,
+                  height: 140,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white.withValues(alpha: 0.07),
+                  ),
                 ),
               ),
               Positioned(
-                right: 50, top: 15,
+                right: 50,
+                top: 15,
                 child: Container(
-                  width: 90, height: 90,
-                  decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white.withOpacity(0.05)),
+                  width: 90,
+                  height: 90,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white.withValues(alpha: 0.05),
+                  ),
                 ),
               ),
               Column(
@@ -197,18 +229,30 @@ class _AccountItemState extends State<_AccountItem> with SingleTickerProviderSta
                   Row(
                     children: [
                       Container(
-                        width: 44, height: 44,
+                        width: 44,
+                        height: 44,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.12),
+                          color: Colors.white.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         alignment: Alignment.center,
                         margin: const EdgeInsets.only(right: 12),
                         child: bank != null
-                            ? Image.asset(bank.symbol, width: 28, height: 28, fit: BoxFit.contain)
+                            ? Image.asset(
+                                bank.symbol,
+                                width: 28,
+                                height: 28,
+                                fit: BoxFit.contain,
+                              )
                             : Text(
-                                widget.account.bankName.substring(0, 2).toUpperCase(),
-                                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 14),
+                                widget.account.bankName
+                                    .substring(0, 2)
+                                    .toUpperCase(),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 14,
+                                ),
                               ),
                       ),
                       Expanded(
@@ -217,14 +261,23 @@ class _AccountItemState extends State<_AccountItem> with SingleTickerProviderSta
                           children: [
                             Text(
                               widget.account.bankName,
-                              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 16),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 16,
+                              ),
                             ),
                             const SizedBox(height: 6),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 3,
+                              ),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.25),
-                                border: Border.all(color: Colors.white.withOpacity(0.5)),
+                                color: Colors.white.withValues(alpha: 0.25),
+                                border: Border.all(
+                                  color: Colors.white.withValues(alpha: 0.5),
+                                ),
                                 borderRadius: BorderRadius.circular(16),
                               ),
                               child: Text(
@@ -236,7 +289,7 @@ class _AccountItemState extends State<_AccountItem> with SingleTickerProviderSta
                                   letterSpacing: 1.5,
                                 ),
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),
@@ -244,23 +297,37 @@ class _AccountItemState extends State<_AccountItem> with SingleTickerProviderSta
                         icon: const Icon(Icons.share_outlined),
                         color: Colors.white54,
                         onPressed: _handleShare,
-                      )
+                      ),
                     ],
                   ),
-                  
+
                   AnimatedCrossFade(
                     duration: const Duration(milliseconds: 320),
-                    crossFadeState: _expanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                    crossFadeState: _expanded
+                        ? CrossFadeState.showSecond
+                        : CrossFadeState.showFirst,
                     firstChild: Padding(
                       padding: const EdgeInsets.only(top: 16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('Account Number', style: TextStyle(color: Colors.white54, fontSize: 11, fontWeight: FontWeight.w600)),
+                          const Text(
+                            'Account Number',
+                            style: TextStyle(
+                              color: Colors.white54,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                           Text(
                             _formatAccountNumber(widget.account.accountNumber),
-                            style: const TextStyle(color: Colors.white, fontSize: 19, fontWeight: FontWeight.w700, letterSpacing: 2),
-                          )
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 19,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 2,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -269,17 +336,37 @@ class _AccountItemState extends State<_AccountItem> with SingleTickerProviderSta
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(height: 1, color: Colors.white.withOpacity(0.12), margin: const EdgeInsets.only(bottom: 16)),
-                          _buildInfoRow('ACCOUNT HOLDER', widget.account.accountHolder, () => _handleCopy(widget.account.accountHolder)),
-                          _buildInfoRow('ACCOUNT NUMBER', _formatAccountNumber(widget.account.accountNumber), () => _handleCopy(widget.account.accountNumber)),
-                          _buildInfoRow('IFSC CODE', widget.account.ifsc.toUpperCase(), () => _handleCopy(widget.account.ifsc)),
-                          _buildInfoRow('BRANCH', widget.account.branchName, () => _handleCopy(widget.account.branchName)),
+                          Container(
+                            height: 1,
+                            color: Colors.white.withValues(alpha: 0.12),
+                            margin: const EdgeInsets.only(bottom: 16),
+                          ),
+                          _buildInfoRow(
+                            'ACCOUNT HOLDER',
+                            widget.account.accountHolder,
+                            () => _handleCopy(widget.account.accountHolder),
+                          ),
+                          _buildInfoRow(
+                            'ACCOUNT NUMBER',
+                            _formatAccountNumber(widget.account.accountNumber),
+                            () => _handleCopy(widget.account.accountNumber),
+                          ),
+                          _buildInfoRow(
+                            'IFSC CODE',
+                            widget.account.ifsc.toUpperCase(),
+                            () => _handleCopy(widget.account.ifsc),
+                          ),
+                          _buildInfoRow(
+                            'BRANCH',
+                            widget.account.branchName,
+                            () => _handleCopy(widget.account.branchName),
+                          ),
                         ],
                       ),
                     ),
-                  )
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),
@@ -295,9 +382,23 @@ class _AccountItemState extends State<_AccountItem> with SingleTickerProviderSta
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(label, style: const TextStyle(color: Colors.white54, fontSize: 11, fontWeight: FontWeight.w600)),
+            Text(
+              label,
+              style: const TextStyle(
+                color: Colors.white54,
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
             const SizedBox(height: 4),
-            Text(value.isNotEmpty ? value : 'Not provided', style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w700)),
+            Text(
+              value.isNotEmpty ? value : 'Not provided',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
           ],
         ),
       ),

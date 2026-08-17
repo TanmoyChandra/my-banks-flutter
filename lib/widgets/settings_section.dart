@@ -15,7 +15,8 @@ class SettingsSection extends StatefulWidget {
   State<SettingsSection> createState() => _SettingsSectionState();
 }
 
-class _SettingsSectionState extends State<SettingsSection> with SingleTickerProviderStateMixin {
+class _SettingsSectionState extends State<SettingsSection>
+    with SingleTickerProviderStateMixin {
   late AnimationController _rotateAnim;
 
   @override
@@ -41,7 +42,10 @@ class _SettingsSectionState extends State<SettingsSection> with SingleTickerProv
     }
   }
 
-  Future<void> _toggleAppLock(BuildContext context, UiProvider uiProvider) async {
+  Future<void> _toggleAppLock(
+    BuildContext context,
+    UiProvider uiProvider,
+  ) async {
     if (uiProvider.isAppLockEnabled) {
       uiProvider.setAppLockEnabled(false);
     } else {
@@ -51,7 +55,13 @@ class _SettingsSectionState extends State<SettingsSection> with SingleTickerProv
 
       if (!canCheckBiometrics || !isDeviceSupported) {
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Your device doesn't support or have biometrics/PIN setup.")));
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                "Your device doesn't support or have biometrics/PIN setup.",
+              ),
+            ),
+          );
         }
         return;
       }
@@ -65,7 +75,9 @@ class _SettingsSectionState extends State<SettingsSection> with SingleTickerProv
         }
       } catch (e) {
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Authentication failed: $e')));
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Authentication failed: $e')));
         }
       }
     }
@@ -79,7 +91,10 @@ class _SettingsSectionState extends State<SettingsSection> with SingleTickerProv
         final theme = Theme.of(context);
         return AlertDialog(
           backgroundColor: theme.colorScheme.surface,
-          title: Text('Edit Profile', style: TextStyle(color: theme.colorScheme.onSurface)),
+          title: Text(
+            'Edit Profile',
+            style: TextStyle(color: theme.colorScheme.onSurface),
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -93,38 +108,63 @@ class _SettingsSectionState extends State<SettingsSection> with SingleTickerProv
                     CircleAvatar(
                       radius: 50,
                       backgroundColor: theme.colorScheme.primaryContainer,
-                      backgroundImage: uiProvider.userImage != null ? FileImage(File(uiProvider.userImage!)) : null,
+                      backgroundImage: uiProvider.userImage != null
+                          ? FileImage(File(uiProvider.userImage!))
+                          : null,
                       child: uiProvider.userImage == null
-                          ? Icon(Icons.person, size: 50, color: theme.colorScheme.onPrimaryContainer)
+                          ? Icon(
+                              Icons.person,
+                              size: 50,
+                              color: theme.colorScheme.onPrimaryContainer,
+                            )
                           : null,
                     ),
                     Positioned(
-                      bottom: 0, right: 0,
+                      bottom: 0,
+                      right: 0,
                       child: Container(
                         padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(color: const Color(0xFFAAEF00), borderRadius: BorderRadius.circular(15)),
-                        child: const Icon(Icons.camera_alt, size: 20, color: Colors.black),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFAAEF00),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: const Icon(
+                          Icons.camera_alt,
+                          size: 20,
+                          color: Colors.black,
+                        ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
               const SizedBox(height: 8),
-              Text('Tap to change picture', style: TextStyle(color: theme.colorScheme.onSurfaceVariant, fontSize: 12)),
+              Text(
+                'Tap to change picture',
+                style: TextStyle(
+                  color: theme.colorScheme.onSurfaceVariant,
+                  fontSize: 12,
+                ),
+              ),
               const SizedBox(height: 20),
               TextField(
                 controller: textController,
                 decoration: InputDecoration(
                   labelText: 'Your Name',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
-              )
+              ),
             ],
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('Cancel', style: TextStyle(color: theme.colorScheme.onSurfaceVariant)),
+              child: Text(
+                'Cancel',
+                style: TextStyle(color: theme.colorScheme.onSurfaceVariant),
+              ),
             ),
             TextButton(
               onPressed: () {
@@ -133,11 +173,14 @@ class _SettingsSectionState extends State<SettingsSection> with SingleTickerProv
                   Navigator.of(context).pop();
                 }
               },
-              child: const Text('Save', style: TextStyle(color: Color(0xFFAAEF00))),
+              child: const Text(
+                'Save',
+                style: TextStyle(color: Color(0xFFAAEF00)),
+              ),
             ),
           ],
         );
-      }
+      },
     );
   }
 
@@ -149,8 +192,18 @@ class _SettingsSectionState extends State<SettingsSection> with SingleTickerProv
         final theme = Theme.of(context);
         return AlertDialog(
           backgroundColor: theme.colorScheme.surface,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
-          title: Text('Payees Master List', style: TextStyle(color: theme.colorScheme.onSurface, fontFamily: 'SpaceGrotesk', fontWeight: FontWeight.w900, fontSize: 24)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(28),
+          ),
+          title: Text(
+            'Payees Master List',
+            style: TextStyle(
+              color: theme.colorScheme.onSurface,
+              fontFamily: 'SpaceGrotesk',
+              fontWeight: FontWeight.w900,
+              fontSize: 24,
+            ),
+          ),
           content: StatefulBuilder(
             builder: (context, setStateModal) {
               return SizedBox(
@@ -158,20 +211,31 @@ class _SettingsSectionState extends State<SettingsSection> with SingleTickerProv
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('Add people you frequently share expenses with. They will appear in your transaction drop-downs.', style: TextStyle(color: theme.colorScheme.onSurfaceVariant, fontSize: 14)),
+                    Text(
+                      'Add people you frequently share expenses with. They will appear in your transaction drop-downs.',
+                      style: TextStyle(
+                        color: theme.colorScheme.onSurfaceVariant,
+                        fontSize: 14,
+                      ),
+                    ),
                     const SizedBox(height: 20),
                     TextField(
                       controller: textController,
                       onChanged: (_) => setStateModal(() {}),
                       decoration: InputDecoration(
                         labelText: 'New Payee Name',
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.add_circle),
-                          color: textController.text.trim().isNotEmpty ? const Color(0xFFAAEF00) : theme.colorScheme.onSurfaceVariant,
+                          color: textController.text.trim().isNotEmpty
+                              ? const Color(0xFFAAEF00)
+                              : theme.colorScheme.onSurfaceVariant,
                           onPressed: () {
                             final name = textController.text.trim();
-                            if (name.isNotEmpty && !walletProvider.payees.contains(name)) {
+                            if (name.isNotEmpty &&
+                                !walletProvider.payees.contains(name)) {
                               walletProvider.addPayee(name);
                               textController.clear();
                               setStateModal(() {});
@@ -183,30 +247,67 @@ class _SettingsSectionState extends State<SettingsSection> with SingleTickerProv
                     const SizedBox(height: 20),
                     Container(
                       height: 240,
-                      decoration: BoxDecoration(color: theme.colorScheme.surfaceVariant, borderRadius: BorderRadius.circular(16)),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.surfaceContainerHighest,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                       child: ListView.separated(
                         itemCount: walletProvider.payees.length,
-                        separatorBuilder: (context, index) => Divider(height: 1, color: theme.colorScheme.outlineVariant),
+                        separatorBuilder: (context, index) => Divider(
+                          height: 1,
+                          color: theme.colorScheme.outlineVariant,
+                        ),
                         itemBuilder: (context, index) {
                           final p = walletProvider.payees[index];
                           final isMe = p == 'Me';
                           return ListTile(
                             leading: CircleAvatar(
-                              backgroundColor: isMe ? const Color(0xFFAAEF00) : theme.colorScheme.primaryContainer,
+                              backgroundColor: isMe
+                                  ? const Color(0xFFAAEF00)
+                                  : theme.colorScheme.primaryContainer,
                               child: Text(
                                 p[0].toUpperCase(),
-                                style: TextStyle(color: isMe ? Colors.black : theme.colorScheme.onPrimaryContainer, fontWeight: FontWeight.w700),
+                                style: TextStyle(
+                                  color: isMe
+                                      ? Colors.black
+                                      : theme.colorScheme.onPrimaryContainer,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
                             ),
-                            title: Text(p, style: TextStyle(color: theme.colorScheme.onSurface, fontWeight: isMe ? FontWeight.w800 : FontWeight.w600)),
+                            title: Text(
+                              p,
+                              style: TextStyle(
+                                color: theme.colorScheme.onSurface,
+                                fontWeight: isMe
+                                    ? FontWeight.w800
+                                    : FontWeight.w600,
+                              ),
+                            ),
                             trailing: isMe
                                 ? Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                                    decoration: BoxDecoration(color: const Color(0x33AAEF00), borderRadius: BorderRadius.circular(12)),
-                                    child: const Text('DEFAULT', style: TextStyle(color: Color(0xFFAAEF00), fontSize: 11, fontWeight: FontWeight.w800)),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 4,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0x33AAEF00),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: const Text(
+                                      'DEFAULT',
+                                      style: TextStyle(
+                                        color: Color(0xFFAAEF00),
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w800,
+                                      ),
+                                    ),
                                   )
                                 : IconButton(
-                                    icon: Icon(Icons.remove_circle_outline, color: theme.colorScheme.error),
+                                    icon: Icon(
+                                      Icons.remove_circle_outline,
+                                      color: theme.colorScheme.error,
+                                    ),
                                     onPressed: () {
                                       walletProvider.removePayee(p);
                                       setStateModal(() {});
@@ -215,21 +316,30 @@ class _SettingsSectionState extends State<SettingsSection> with SingleTickerProv
                           );
                         },
                       ),
-                    )
+                    ),
                   ],
                 ),
               );
-            }
+            },
           ),
           actions: [
             FilledButton(
               onPressed: () => Navigator.of(context).pop(),
-              style: FilledButton.styleFrom(backgroundColor: const Color(0xFFAAEF00), foregroundColor: Colors.black, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
-              child: const Text('Done', style: TextStyle(fontWeight: FontWeight.w800)),
-            )
+              style: FilledButton.styleFrom(
+                backgroundColor: const Color(0xFFAAEF00),
+                foregroundColor: Colors.black,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: const Text(
+                'Done',
+                style: TextStyle(fontWeight: FontWeight.w800),
+              ),
+            ),
           ],
         );
-      }
+      },
     );
   }
 
@@ -239,14 +349,16 @@ class _SettingsSectionState extends State<SettingsSection> with SingleTickerProv
     final uiProvider = context.watch<UiProvider>();
     final walletProvider = context.watch<WalletProvider>();
     final isDark = theme.brightness == Brightness.dark;
-    
+
     if (isDark) {
       _rotateAnim.forward();
     } else {
       _rotateAnim.reverse();
     }
 
-    final initials = uiProvider.userName.isNotEmpty ? uiProvider.userName[0].toUpperCase() : '?';
+    final initials = uiProvider.userName.isNotEmpty
+        ? uiProvider.userName[0].toUpperCase()
+        : '?';
 
     return SafeArea(
       bottom: false,
@@ -286,8 +398,15 @@ class _SettingsSectionState extends State<SettingsSection> with SingleTickerProv
                     RotationTransition(
                       turns: Tween(begin: 0.0, end: 0.5).animate(_rotateAnim),
                       child: IconButton(
-                        icon: Icon(isDark ? Icons.wb_sunny : Icons.nightlight_round, color: isDark ? Colors.black : Colors.white),
-                        style: IconButton.styleFrom(backgroundColor: isDark ? const Color(0xFFAAEF00) : const Color(0xFF1C1C1C)),
+                        icon: Icon(
+                          isDark ? Icons.wb_sunny : Icons.nightlight_round,
+                          color: isDark ? Colors.black : Colors.white,
+                        ),
+                        style: IconButton.styleFrom(
+                          backgroundColor: isDark
+                              ? const Color(0xFFAAEF00)
+                              : const Color(0xFF1C1C1C),
+                        ),
                         onPressed: uiProvider.toggleTheme,
                       ),
                     ),
@@ -297,7 +416,9 @@ class _SettingsSectionState extends State<SettingsSection> with SingleTickerProv
                       child: CircleAvatar(
                         radius: 20,
                         backgroundColor: theme.colorScheme.primaryContainer,
-                        backgroundImage: uiProvider.userImage != null ? FileImage(File(uiProvider.userImage!)) : null,
+                        backgroundImage: uiProvider.userImage != null
+                            ? FileImage(File(uiProvider.userImage!))
+                            : null,
                         child: uiProvider.userImage == null
                             ? Text(
                                 initials,
@@ -316,7 +437,10 @@ class _SettingsSectionState extends State<SettingsSection> with SingleTickerProv
           ),
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16).copyWith(bottom: 96),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 16,
+              ).copyWith(bottom: 96),
               children: [
                 _SectionLabel(label: 'PROFILE'),
                 _SetupCard(
@@ -349,7 +473,8 @@ class _SettingsSectionState extends State<SettingsSection> with SingleTickerProv
                 _SetupCard(
                   icon: Icons.storefront,
                   title: 'Merchant QR Codes',
-                  subtitle: 'Add frequently-used merchant QR codes from your gallery',
+                  subtitle:
+                      'Add frequently-used merchant QR codes from your gallery',
                   onPress: () => context.push('/main/setup-merchant-qr'),
                 ),
                 _SetupCard(
@@ -372,59 +497,125 @@ class _SettingsSectionState extends State<SettingsSection> with SingleTickerProv
                 _SectionLabel(label: 'SECURITY'),
                 Container(
                   margin: const EdgeInsets.only(bottom: 12),
-                  decoration: BoxDecoration(color: theme.colorScheme.surfaceVariant, borderRadius: BorderRadius.circular(16)),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                   child: ListTile(
                     leading: Container(
-                      width: 40, height: 40,
-                      decoration: BoxDecoration(color: const Color(0xFFAAEF00), borderRadius: BorderRadius.circular(12)),
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFAAEF00),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       child: const Icon(Icons.fingerprint, color: Colors.black),
                     ),
-                    title: const Text('App Lock', style: TextStyle(fontWeight: FontWeight.w700)),
-                    subtitle: const Text('Require fingerprint or PIN to open', style: TextStyle(fontSize: 12)),
+                    title: const Text(
+                      'App Lock',
+                      style: TextStyle(fontWeight: FontWeight.w700),
+                    ),
+                    subtitle: const Text(
+                      'Require fingerprint or PIN to open',
+                      style: TextStyle(fontSize: 12),
+                    ),
                     trailing: Switch(
                       value: uiProvider.isAppLockEnabled,
                       onChanged: (val) => _toggleAppLock(context, uiProvider),
-                      activeColor: const Color(0xFFAAEF00),
+                      activeThumbColor: const Color(0xFFAAEF00),
                     ),
                   ),
                 ),
                 Container(
                   padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(color: theme.colorScheme.surfaceVariant, borderRadius: BorderRadius.circular(24), border: Border.all(color: theme.colorScheme.outlineVariant)),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(color: theme.colorScheme.outlineVariant),
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('MyBanks Security', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 18)),
+                      const Text(
+                        'MyBanks Security',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 18,
+                        ),
+                      ),
                       const SizedBox(height: 16),
                       RichText(
                         text: TextSpan(
-                          style: TextStyle(color: theme.colorScheme.onSurface, fontSize: 14, height: 1.5),
+                          style: TextStyle(
+                            color: theme.colorScheme.onSurface,
+                            fontSize: 14,
+                            height: 1.5,
+                          ),
                           children: const [
                             TextSpan(text: 'Your data is '),
-                            TextSpan(text: '100% unbreakable', style: TextStyle(fontWeight: FontWeight.w700)),
-                            TextSpan(text: '. All information is encrypted and stored locally on your mobile phone for ultimate privacy.'),
+                            TextSpan(
+                              text: '100% unbreakable',
+                              style: TextStyle(fontWeight: FontWeight.w700),
+                            ),
+                            TextSpan(
+                              text:
+                                  '. All information is encrypted and stored locally on your mobile phone for ultimate privacy.',
+                            ),
                           ],
                         ),
                       ),
                       const SizedBox(height: 8),
-                      Text('No accounts, no trackers, no cloud sync. Everything stays on your device, exactly where it belongs.', style: TextStyle(color: theme.colorScheme.onSurfaceVariant, fontSize: 12)),
+                      Text(
+                        'No accounts, no trackers, no cloud sync. Everything stays on your device, exactly where it belongs.',
+                        style: TextStyle(
+                          color: theme.colorScheme.onSurfaceVariant,
+                          fontSize: 12,
+                        ),
+                      ),
                       const SizedBox(height: 16),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          _SecurityFeature(icon: Icons.cloud_off, label: 'Offline Only'),
-                          _SecurityFeature(icon: Icons.security, label: 'AES-XOR'),
-                          _SecurityFeature(icon: Icons.fingerprint, label: 'Biometric'),
+                          _SecurityFeature(
+                            icon: Icons.cloud_off,
+                            label: 'Offline Only',
+                          ),
+                          _SecurityFeature(
+                            icon: Icons.security,
+                            label: 'AES-XOR',
+                          ),
+                          _SecurityFeature(
+                            icon: Icons.fingerprint,
+                            label: 'Biometric',
+                          ),
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(height: 24),
-                Text('Made with ❤️ by Tanmoy Chandra', textAlign: TextAlign.center, style: TextStyle(color: theme.colorScheme.onSurfaceVariant.withOpacity(0.5), fontSize: 13)),
+                Text(
+                  'Made with ❤️ by Tanmoy Chandra',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: theme.colorScheme.onSurfaceVariant.withValues(
+                      alpha: 0.5,
+                    ),
+                    fontSize: 13,
+                  ),
+                ),
                 const SizedBox(height: 12),
-                Text('Version 1.0.0', textAlign: TextAlign.center, style: TextStyle(color: theme.colorScheme.onSurfaceVariant.withOpacity(0.4), fontSize: 11)),
+                Text(
+                  'Version 1.0.0',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: theme.colorScheme.onSurfaceVariant.withValues(
+                      alpha: 0.4,
+                    ),
+                    fontSize: 11,
+                  ),
+                ),
               ],
             ),
           ),
@@ -442,7 +633,15 @@ class _SectionLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 4, bottom: 8),
-      child: Text(label, style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.2)),
+      child: Text(
+        label,
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+          fontSize: 11,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 1.2,
+        ),
+      ),
     );
   }
 }
@@ -453,23 +652,38 @@ class _SetupCard extends StatelessWidget {
   final String subtitle;
   final VoidCallback onPress;
 
-  const _SetupCard({required this.icon, required this.title, required this.subtitle, required this.onPress});
+  const _SetupCard({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onPress,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(color: Theme.of(context).colorScheme.surfaceVariant, borderRadius: BorderRadius.circular(16)),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(16),
+      ),
       child: ListTile(
         onTap: onPress,
         leading: Container(
-          width: 40, height: 40,
-          decoration: BoxDecoration(color: const Color(0xFFAAEF00), borderRadius: BorderRadius.circular(12)),
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: const Color(0xFFAAEF00),
+            borderRadius: BorderRadius.circular(12),
+          ),
           child: Icon(icon, color: Colors.black),
         ),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
         subtitle: Text(subtitle, style: const TextStyle(fontSize: 12)),
-        trailing: Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.onSurfaceVariant),
+        trailing: Icon(
+          Icons.chevron_right,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
       ),
     );
   }
@@ -484,9 +698,20 @@ class _SecurityFeature extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, size: 16, color: Theme.of(context).colorScheme.onSurfaceVariant),
+        Icon(
+          icon,
+          size: 16,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
         const SizedBox(width: 6),
-        Text(label, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Theme.of(context).colorScheme.onSurfaceVariant)),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w700,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+        ),
       ],
     );
   }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:go_router/go_router.dart';
 import 'dart:io';
 
 import '../providers/ui_provider.dart';
@@ -31,9 +30,12 @@ class _CalculatorSectionState extends State<CalculatorSection> {
 
   @override
   void dispose() {
-    _c1x.dispose(); _c1y.dispose();
-    _c2x.dispose(); _c2y.dispose();
-    _c3x.dispose(); _c3y.dispose();
+    _c1x.dispose();
+    _c1y.dispose();
+    _c2x.dispose();
+    _c2y.dispose();
+    _c3x.dispose();
+    _c3y.dispose();
     super.dispose();
   }
 
@@ -41,7 +43,11 @@ class _CalculatorSectionState extends State<CalculatorSection> {
     final x = double.tryParse(_c1x.text);
     final y = double.tryParse(_c1y.text);
     if (x != null && y != null) {
-      setState(() => _c1Res = ((x / 100) * y).toStringAsFixed(3).replaceAll(RegExp(r'\.?0*$'), ''));
+      setState(
+        () => _c1Res = ((x / 100) * y)
+            .toStringAsFixed(3)
+            .replaceAll(RegExp(r'\.?0*$'), ''),
+      );
     } else {
       setState(() => _c1Res = '');
     }
@@ -51,7 +57,11 @@ class _CalculatorSectionState extends State<CalculatorSection> {
     final x = double.tryParse(_c2x.text);
     final y = double.tryParse(_c2y.text);
     if (x != null && y != null && y != 0) {
-      setState(() => _c2Res = ((x / y) * 100).toStringAsFixed(3).replaceAll(RegExp(r'\.?0*$'), ''));
+      setState(
+        () => _c2Res = ((x / y) * 100)
+            .toStringAsFixed(3)
+            .replaceAll(RegExp(r'\.?0*$'), ''),
+      );
     } else {
       setState(() => _c2Res = '');
     }
@@ -62,7 +72,10 @@ class _CalculatorSectionState extends State<CalculatorSection> {
     final y = double.tryParse(_c3y.text);
     if (x != null && y != null && x != 0) {
       final diff = y - x;
-      setState(() => _c3Res = '${((diff / x.abs()) * 100).toStringAsFixed(3).replaceAll(RegExp(r'\.?0*$'), '')}%');
+      setState(
+        () => _c3Res =
+            '${((diff / x.abs()) * 100).toStringAsFixed(3).replaceAll(RegExp(r'\.?0*$'), '')}%',
+      );
     } else {
       setState(() => _c3Res = '');
     }
@@ -72,7 +85,12 @@ class _CalculatorSectionState extends State<CalculatorSection> {
     if (text.isNotEmpty) {
       await Clipboard.setData(ClipboardData(text: text));
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Copied to clipboard'), duration: Duration(seconds: 1)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Copied to clipboard'),
+            duration: Duration(seconds: 1),
+          ),
+        );
       }
     }
   }
@@ -82,7 +100,9 @@ class _CalculatorSectionState extends State<CalculatorSection> {
     final theme = Theme.of(context);
     final uiProvider = context.watch<UiProvider>();
     final isDark = theme.brightness == Brightness.dark;
-    final initials = uiProvider.userName.isNotEmpty ? uiProvider.userName[0].toUpperCase() : '?';
+    final initials = uiProvider.userName.isNotEmpty
+        ? uiProvider.userName[0].toUpperCase()
+        : '?';
 
     return SafeArea(
       bottom: false,
@@ -110,7 +130,9 @@ class _CalculatorSectionState extends State<CalculatorSection> {
                       Text(
                         'Quickly calculate percentages with ease.',
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: isDark ? const Color(0xFFA1A1AA) : const Color(0xFF52525B),
+                          color: isDark
+                              ? const Color(0xFFA1A1AA)
+                              : const Color(0xFF52525B),
                         ),
                       ),
                     ],
@@ -120,7 +142,9 @@ class _CalculatorSectionState extends State<CalculatorSection> {
                 CircleAvatar(
                   radius: 20,
                   backgroundColor: theme.colorScheme.primaryContainer,
-                  backgroundImage: uiProvider.userImage != null ? FileImage(File(uiProvider.userImage!)) : null,
+                  backgroundImage: uiProvider.userImage != null
+                      ? FileImage(File(uiProvider.userImage!))
+                      : null,
                   child: uiProvider.userImage == null
                       ? Text(
                           initials,
@@ -136,7 +160,10 @@ class _CalculatorSectionState extends State<CalculatorSection> {
           ),
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16).copyWith(bottom: 96),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 16,
+              ).copyWith(bottom: 96),
               children: [
                 _CalcCard(
                   icon: Icons.percent,
@@ -181,36 +208,58 @@ class _CalculatorSectionState extends State<CalculatorSection> {
                   decoration: BoxDecoration(
                     color: isDark ? const Color(0xFF161616) : Colors.white,
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: isDark ? const Color(0xFF2C2C2E) : const Color(0xFFE5E5EA)),
+                    border: Border.all(
+                      color: isDark
+                          ? const Color(0xFF2C2C2E)
+                          : const Color(0xFFE5E5EA),
+                    ),
                   ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        width: 34, height: 34,
+                        width: 34,
+                        height: 34,
                         decoration: BoxDecoration(
-                          color: isDark ? const Color(0x14AAEF00) : const Color(0x33AAEF00),
+                          color: isDark
+                              ? const Color(0x14AAEF00)
+                              : const Color(0x33AAEF00),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(Icons.lightbulb_outline, color: Color(0xFFAAEF00), size: 18),
+                        child: const Icon(
+                          Icons.lightbulb_outline,
+                          color: Color(0xFFAAEF00),
+                          size: 18,
+                        ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('How it works', style: TextStyle(color: Color(0xFFAAEF00), fontWeight: FontWeight.w700, fontSize: 14)),
+                            const Text(
+                              'How it works',
+                              style: TextStyle(
+                                color: Color(0xFFAAEF00),
+                                fontWeight: FontWeight.w700,
+                                fontSize: 14,
+                              ),
+                            ),
                             const SizedBox(height: 4),
                             Text(
                               'Enter the required values in the fields above and tap Calculate to get the result instantly.',
-                              style: TextStyle(color: theme.colorScheme.onSurfaceVariant, fontSize: 12, height: 1.5),
-                            )
+                              style: TextStyle(
+                                color: theme.colorScheme.onSurfaceVariant,
+                                fontSize: 12,
+                                height: 1.5,
+                              ),
+                            ),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -253,9 +302,13 @@ class _CalcCard extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
     final accentColor = const Color(0xFFAAEF00);
     final cardBg = isDark ? const Color(0xFF161616) : Colors.white;
-    final borderColor = isDark ? const Color(0xFF2C2C2E) : const Color(0xFFE5E5EA);
+    final borderColor = isDark
+        ? const Color(0xFF2C2C2E)
+        : const Color(0xFFE5E5EA);
     final inputBg = isDark ? const Color(0xFF101010) : const Color(0xFFF2F2F7);
-    final inputBorderColor = isDark ? const Color(0xFF242424) : const Color(0xFFD1D1D6);
+    final inputBorderColor = isDark
+        ? const Color(0xFF242424)
+        : const Color(0xFFD1D1D6);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -270,22 +323,37 @@ class _CalcCard extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: 34, height: 34,
+                width: 34,
+                height: 34,
                 decoration: BoxDecoration(
-                  color: isDark ? const Color(0x14AAEF00) : const Color(0x33AAEF00),
+                  color: isDark
+                      ? const Color(0x14AAEF00)
+                      : const Color(0x33AAEF00),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(icon, color: accentColor, size: 18),
               ),
               const SizedBox(width: 12),
-              Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 16),
           Row(
             children: [
               if (prefixText != null) ...[
-                Text(prefixText!, style: TextStyle(color: theme.colorScheme.onSurfaceVariant, fontSize: 13)),
+                Text(
+                  prefixText!,
+                  style: TextStyle(
+                    color: theme.colorScheme.onSurfaceVariant,
+                    fontSize: 13,
+                  ),
+                ),
                 const SizedBox(width: 8),
               ],
               Expanded(
@@ -298,7 +366,13 @@ class _CalcCard extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Text(separator, style: TextStyle(color: theme.colorScheme.onSurfaceVariant, fontSize: 13)),
+                child: Text(
+                  separator,
+                  style: TextStyle(
+                    color: theme.colorScheme.onSurfaceVariant,
+                    fontSize: 13,
+                  ),
+                ),
               ),
               Expanded(
                 child: _StyledTextField(
@@ -310,7 +384,13 @@ class _CalcCard extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Text('=', style: TextStyle(color: theme.colorScheme.onSurfaceVariant, fontSize: 13)),
+                child: Text(
+                  '=',
+                  style: TextStyle(
+                    color: theme.colorScheme.onSurfaceVariant,
+                    fontSize: 13,
+                  ),
+                ),
               ),
             ],
           ),
@@ -329,9 +409,14 @@ class _CalcCard extends StatelessWidget {
                     style: FilledButton.styleFrom(
                       backgroundColor: accentColor,
                       foregroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
-                    child: const Text('Calculate', style: TextStyle(fontWeight: FontWeight.w700)),
+                    child: const Text(
+                      'Calculate',
+                      style: TextStyle(fontWeight: FontWeight.w700),
+                    ),
                   ),
                 ),
               ),
@@ -352,7 +437,9 @@ class _CalcCard extends StatelessWidget {
                         child: Text(
                           resultValue.isNotEmpty ? resultValue : 'Result',
                           style: TextStyle(
-                            color: resultValue.isNotEmpty ? theme.colorScheme.onSurface : const Color(0xFF6A6A6C),
+                            color: resultValue.isNotEmpty
+                                ? theme.colorScheme.onSurface
+                                : const Color(0xFF6A6A6C),
                             fontSize: 14,
                           ),
                           maxLines: 1,
@@ -365,13 +452,13 @@ class _CalcCard extends StatelessWidget {
                         onPressed: onCopy,
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
-                      )
+                      ),
                     ],
                   ),
                 ),
-              )
+              ),
             ],
-          )
+          ),
         ],
       ),
     );
@@ -415,7 +502,9 @@ class _StyledTextField extends StatelessWidget {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
+            borderSide: BorderSide(
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
         ),
       ),

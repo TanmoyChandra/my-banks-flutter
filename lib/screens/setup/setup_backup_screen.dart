@@ -42,10 +42,7 @@ class _SetupBackupScreenState extends State<SetupBackupScreen> {
           'merchantQRs': wallet.merchantQRs.map((e) => e.toJson()).toList(),
           'payees': wallet.payees,
         },
-        'preferences': {
-          'userName': ui.userName,
-          'isDark': ui.isDark,
-        },
+        'preferences': {'userName': ui.userName, 'isDark': ui.isDark},
       };
 
       final String jsonString = jsonEncode(payload);
@@ -53,13 +50,18 @@ class _SetupBackupScreenState extends State<SetupBackupScreen> {
       const secretKey = "MB_SECURE_STORAGE_KEY_2026";
       final buffer = StringBuffer();
       for (int i = 0; i < base64Data.length; i++) {
-        final xored = base64Data.codeUnitAt(i) ^ secretKey.codeUnitAt(i % secretKey.length);
+        final xored =
+            base64Data.codeUnitAt(i) ^
+            secretKey.codeUnitAt(i % secretKey.length);
         buffer.write(xored.toRadixString(16).padLeft(2, '0'));
       }
       final finalData = 'MYBANKS_ENCRYPTED_V4::${buffer.toString()}';
 
       final directory = await getApplicationDocumentsDirectory();
-      final dateStr = DateTime.now().toIso8601String().replaceAll(':', '-').split('.')[0];
+      final dateStr = DateTime.now()
+          .toIso8601String()
+          .replaceAll(':', '-')
+          .split('.')[0];
       final file = File('${directory.path}/mybanks_backup_$dateStr.mbk');
       await file.writeAsString(finalData);
 
@@ -88,9 +90,7 @@ class _SetupBackupScreenState extends State<SetupBackupScreen> {
     });
 
     try {
-      var result = await FilePicker.pickFiles(
-        type: FileType.any,
-      );
+      var result = await FilePicker.pickFiles(type: FileType.any);
 
       if (result.isNotEmpty && result.first.path != null) {
         File file = File(result.first.path!);
@@ -128,7 +128,7 @@ class _SetupBackupScreenState extends State<SetupBackupScreen> {
         if (base64Data.isNotEmpty) {
           jsonString = utf8.decode(base64Decode(base64Data));
         }
-        
+
         final payload = jsonDecode(jsonString);
 
         if (payload['magic'] != 'MYBANKS_BACKUP') {
@@ -164,14 +164,35 @@ class _SetupBackupScreenState extends State<SetupBackupScreen> {
 
     try {
       final pWallet = _pendingPayload!['wallet'];
-      
+
       // Parse QREntries
-      final upis = (pWallet['upis'] as List?)?.map((e) => QREntry.fromJson(e)).toList() ?? [];
-      final cards = (pWallet['cards'] as List?)?.map((e) => CardEntry.fromJson(e)).toList() ?? [];
-      final accounts = (pWallet['accounts'] as List?)?.map((e) => BankAccount.fromJson(e)).toList() ?? [];
-      final transactions = (pWallet['transactions'] as List?)?.map((e) => CardTransaction.fromJson(e)).toList() ?? [];
-      final merchantQrs = (pWallet['merchantQRs'] as List?)?.map((e) => MerchantQR.fromJson(e)).toList() ?? [];
-      final payees = (pWallet['payees'] as List?)?.cast<String>().toList() ?? ['Me'];
+      final upis =
+          (pWallet['upis'] as List?)
+              ?.map((e) => QREntry.fromJson(e))
+              .toList() ??
+          [];
+      final cards =
+          (pWallet['cards'] as List?)
+              ?.map((e) => CardEntry.fromJson(e))
+              .toList() ??
+          [];
+      final accounts =
+          (pWallet['accounts'] as List?)
+              ?.map((e) => BankAccount.fromJson(e))
+              .toList() ??
+          [];
+      final transactions =
+          (pWallet['transactions'] as List?)
+              ?.map((e) => CardTransaction.fromJson(e))
+              .toList() ??
+          [];
+      final merchantQrs =
+          (pWallet['merchantQRs'] as List?)
+              ?.map((e) => MerchantQR.fromJson(e))
+              .toList() ??
+          [];
+      final payees =
+          (pWallet['payees'] as List?)?.cast<String>().toList() ?? ['Me'];
 
       wallet.setAllState({
         'upis': upis.map((e) => e.toJson()).toList(),
@@ -216,14 +237,24 @@ class _SetupBackupScreenState extends State<SetupBackupScreen> {
     final theme = Theme.of(context);
     final wallet = context.watch<WalletProvider>();
     final ui = context.watch<UiProvider>();
-    final totalItems = wallet.upis.length + wallet.cards.length + wallet.accounts.length + wallet.merchantQRs.length;
+    final totalItems =
+        wallet.upis.length +
+        wallet.cards.length +
+        wallet.accounts.length +
+        wallet.merchantQRs.length;
 
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       appBar: AppBar(
-        title: const Text('Backup & Restore', style: TextStyle(fontWeight: FontWeight.w900)),
+        title: const Text(
+          'Backup & Restore',
+          style: TextStyle(fontWeight: FontWeight.w900),
+        ),
         backgroundColor: theme.colorScheme.surface,
-        leading: IconButton(icon: const Icon(Icons.close), onPressed: () => context.pop()),
+        leading: IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () => context.pop(),
+        ),
       ),
       body: _pendingPayload != null
           ? _buildConfirmDialog(theme, wallet, ui)
@@ -234,24 +265,48 @@ class _SetupBackupScreenState extends State<SetupBackupScreen> {
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.surfaceVariant,
+                      color: theme.colorScheme.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('🔐  Encrypted Backup', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: theme.colorScheme.onSurface)),
+                        Text(
+                          '🔐  Encrypted Backup',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: theme.colorScheme.onSurface,
+                          ),
+                        ),
                         const SizedBox(height: 8),
                         Text(
                           'Your data is saved in a JSON format. The backup file (.mbk) can be restored via this app. Store it in a safe location.',
-                          style: TextStyle(color: theme.colorScheme.onSurfaceVariant),
+                          style: TextStyle(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
                         ),
                         const SizedBox(height: 12),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                          decoration: BoxDecoration(color: const Color(0xFFAAEF00).withOpacity(0.2), borderRadius: BorderRadius.circular(20)),
-                          child: Text('$totalItems items in current data', style: const TextStyle(color: Color(0xFFAAEF00), fontWeight: FontWeight.bold, fontSize: 12)),
-                        )
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(
+                              0xFFAAEF00,
+                            ).withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            '$totalItems items in current data',
+                            style: const TextStyle(
+                              color: Color(0xFFAAEF00),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -261,19 +316,34 @@ class _SetupBackupScreenState extends State<SetupBackupScreen> {
                       padding: const EdgeInsets.all(12),
                       margin: const EdgeInsets.only(bottom: 16),
                       decoration: BoxDecoration(
-                        color: _isError ? theme.colorScheme.errorContainer : const Color(0xFFAAEF00).withOpacity(0.2),
+                        color: _isError
+                            ? theme.colorScheme.errorContainer
+                            : const Color(0xFFAAEF00).withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
                         children: [
-                          Text(_isError ? '❌ ' : '✅ ', style: const TextStyle(fontSize: 16)),
-                          Expanded(child: Text(_statusMessage, style: TextStyle(color: _isError ? theme.colorScheme.onErrorContainer : const Color(0xFFAAEF00), fontWeight: FontWeight.bold))),
+                          Text(
+                            _isError ? '❌ ' : '✅ ',
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                          Expanded(
+                            child: Text(
+                              _statusMessage,
+                              style: TextStyle(
+                                color: _isError
+                                    ? theme.colorScheme.onErrorContainer
+                                    : const Color(0xFFAAEF00),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
                   Container(
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.surfaceVariant,
+                      color: theme.colorScheme.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Column(
@@ -281,23 +351,60 @@ class _SetupBackupScreenState extends State<SetupBackupScreen> {
                         ListTile(
                           leading: Container(
                             padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(color: const Color(0xFFAAEF00), borderRadius: BorderRadius.circular(12)),
-                            child: const Text('📤', style: TextStyle(fontSize: 24)),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFAAEF00),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Text(
+                              '📤',
+                              style: TextStyle(fontSize: 24),
+                            ),
                           ),
-                          title: Text('Export Backup', style: TextStyle(fontWeight: FontWeight.bold, color: theme.colorScheme.onSurface)),
-                          subtitle: Text('Save an encrypted .mbk file to share or store', style: TextStyle(color: theme.colorScheme.onSurfaceVariant)),
+                          title: Text(
+                            'Export Backup',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: theme.colorScheme.onSurface,
+                            ),
+                          ),
+                          subtitle: Text(
+                            'Save an encrypted .mbk file to share or store',
+                            style: TextStyle(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
                           trailing: const Icon(Icons.chevron_right),
                           onTap: () => _handleExport(wallet, ui),
                         ),
-                        Divider(height: 1, color: theme.colorScheme.outlineVariant),
+                        Divider(
+                          height: 1,
+                          color: theme.colorScheme.outlineVariant,
+                        ),
                         ListTile(
                           leading: Container(
                             padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(color: theme.colorScheme.primaryContainer, borderRadius: BorderRadius.circular(12)),
-                            child: const Text('📥', style: TextStyle(fontSize: 24)),
+                            decoration: BoxDecoration(
+                              color: theme.colorScheme.primaryContainer,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Text(
+                              '📥',
+                              style: TextStyle(fontSize: 24),
+                            ),
                           ),
-                          title: Text('Import Backup', style: TextStyle(fontWeight: FontWeight.bold, color: theme.colorScheme.onSurface)),
-                          subtitle: Text('Restore from a previously exported .mbk file', style: TextStyle(color: theme.colorScheme.onSurfaceVariant)),
+                          title: Text(
+                            'Import Backup',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: theme.colorScheme.onSurface,
+                            ),
+                          ),
+                          subtitle: Text(
+                            'Restore from a previously exported .mbk file',
+                            style: TextStyle(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
                           trailing: const Icon(Icons.chevron_right),
                           onTap: _handleImport,
                         ),
@@ -310,32 +417,67 @@ class _SetupBackupScreenState extends State<SetupBackupScreen> {
     );
   }
 
-  Widget _buildConfirmDialog(ThemeData theme, WalletProvider wallet, UiProvider ui) {
+  Widget _buildConfirmDialog(
+    ThemeData theme,
+    WalletProvider wallet,
+    UiProvider ui,
+  ) {
     final payload = _pendingPayload!;
     final dateStr = DateTime.parse(payload['exportedAt']).toLocal().toString();
-    
+
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('Restore Backup?', style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
+          Text(
+            'Restore Backup?',
+            style: theme.textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           const SizedBox(height: 16),
           Container(
             padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(color: theme.colorScheme.errorContainer, borderRadius: BorderRadius.circular(12)),
-            child: Text('⚠️ This will replace ALL current data. This action cannot be undone.', style: TextStyle(color: theme.colorScheme.onErrorContainer)),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.errorContainer,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              '⚠️ This will replace ALL current data. This action cannot be undone.',
+              style: TextStyle(color: theme.colorScheme.onErrorContainer),
+            ),
           ),
           const SizedBox(height: 16),
-          Text('Backup from $dateStr', style: TextStyle(color: theme.colorScheme.onSurfaceVariant)),
+          Text(
+            'Backup from $dateStr',
+            style: TextStyle(color: theme.colorScheme.onSurfaceVariant),
+          ),
           const SizedBox(height: 24),
           Row(
             children: [
-              Expanded(child: OutlinedButton(onPressed: () => setState(() => _pendingPayload = null), child: const Text('Cancel'))),
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => setState(() => _pendingPayload = null),
+                  child: const Text('Cancel'),
+                ),
+              ),
               const SizedBox(width: 16),
-              Expanded(child: FilledButton(style: FilledButton.styleFrom(backgroundColor: const Color(0xFFAAEF00), foregroundColor: Colors.black), onPressed: () => _confirmRestore(wallet, ui), child: const Text('Restore Now', style: TextStyle(fontWeight: FontWeight.bold)))),
+              Expanded(
+                child: FilledButton(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: const Color(0xFFAAEF00),
+                    foregroundColor: Colors.black,
+                  ),
+                  onPressed: () => _confirmRestore(wallet, ui),
+                  child: const Text(
+                    'Restore Now',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
             ],
-          )
+          ),
         ],
       ),
     );
