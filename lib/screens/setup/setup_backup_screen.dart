@@ -262,97 +262,88 @@ class _SetupBackupScreenState extends State<SetupBackupScreen> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.surfaceContainerHighest,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '🔐  Encrypted Backup',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: theme.colorScheme.onSurface,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Your data is saved in a JSON format. The backup file (.mbk) can be restored via this app. Store it in a safe location.',
-                          style: TextStyle(
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: const Color(
-                              0xFFAAEF00,
-                            ).withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(
-                            '$totalItems items in current data',
-                            style: const TextStyle(
-                              color: Color(0xFFAAEF00),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  if (_statusMessage.isNotEmpty)
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      margin: const EdgeInsets.only(bottom: 16),
-                      decoration: BoxDecoration(
-                        color: _isError
-                            ? theme.colorScheme.errorContainer
-                            : const Color(0xFFAAEF00).withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            _isError ? '❌ ' : '✅ ',
-                            style: const TextStyle(fontSize: 16),
+                            '🔐  Encrypted Backup',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: theme.colorScheme.onSurface,
+                            ),
                           ),
-                          Expanded(
+                          const SizedBox(height: 8),
+                          Text(
+                            'Your data is saved in a JSON format. The backup file (.mbk) can be restored via this app. Store it in a safe location.',
+                            style: TextStyle(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: theme.colorScheme.primaryContainer,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
                             child: Text(
-                              _statusMessage,
+                              '$totalItems items in current data',
                               style: TextStyle(
-                                color: _isError
-                                    ? theme.colorScheme.onErrorContainer
-                                    : const Color(0xFFAAEF00),
+                                color: theme.colorScheme.onPrimaryContainer,
                                 fontWeight: FontWeight.bold,
+                                fontSize: 12,
                               ),
                             ),
                           ),
                         ],
                       ),
                     ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.surfaceContainerHighest,
-                      borderRadius: BorderRadius.circular(16),
+                  ),
+                  const SizedBox(height: 16),
+                  if (_statusMessage.isNotEmpty)
+                    Card(
+                      color: _isError
+                          ? theme.colorScheme.errorContainer
+                          : theme.colorScheme.primaryContainer,
+                      margin: const EdgeInsets.only(bottom: 16),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Row(
+                          children: [
+                            Text(
+                              _isError ? '❌ ' : '✅ ',
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                            Expanded(
+                              child: Text(
+                                _statusMessage,
+                                style: TextStyle(
+                                  color: _isError
+                                      ? theme.colorScheme.onErrorContainer
+                                      : theme.colorScheme.onPrimaryContainer,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
+                  Card(
                     child: Column(
                       children: [
                         ListTile(
                           leading: Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFAAEF00),
+                              color: theme.colorScheme.primaryContainer,
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: const Text(
@@ -465,10 +456,6 @@ class _SetupBackupScreenState extends State<SetupBackupScreen> {
               const SizedBox(width: 16),
               Expanded(
                 child: FilledButton(
-                  style: FilledButton.styleFrom(
-                    backgroundColor: const Color(0xFFAAEF00),
-                    foregroundColor: Colors.black,
-                  ),
                   onPressed: () => _confirmRestore(wallet, ui),
                   child: const Text(
                     'Restore Now',

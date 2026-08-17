@@ -90,7 +90,6 @@ class _SettingsSectionState extends State<SettingsSection>
       builder: (context) {
         final theme = Theme.of(context);
         return AlertDialog(
-          backgroundColor: theme.colorScheme.surface,
           title: Text(
             'Edit Profile',
             style: TextStyle(color: theme.colorScheme.onSurface),
@@ -125,13 +124,13 @@ class _SettingsSectionState extends State<SettingsSection>
                       child: Container(
                         padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFAAEF00),
+                          color: theme.colorScheme.primaryContainer,
                           borderRadius: BorderRadius.circular(15),
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.camera_alt,
                           size: 20,
-                          color: Colors.black,
+                          color: theme.colorScheme.onPrimaryContainer,
                         ),
                       ),
                     ),
@@ -173,9 +172,9 @@ class _SettingsSectionState extends State<SettingsSection>
                   Navigator.of(context).pop();
                 }
               },
-              child: const Text(
+              child: Text(
                 'Save',
-                style: TextStyle(color: Color(0xFFAAEF00)),
+                style: TextStyle(color: theme.colorScheme.primary),
               ),
             ),
           ],
@@ -191,10 +190,6 @@ class _SettingsSectionState extends State<SettingsSection>
       builder: (context) {
         final theme = Theme.of(context);
         return AlertDialog(
-          backgroundColor: theme.colorScheme.surface,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(28),
-          ),
           title: Text(
             'Payees Master List',
             style: TextStyle(
@@ -230,7 +225,7 @@ class _SettingsSectionState extends State<SettingsSection>
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.add_circle),
                           color: textController.text.trim().isNotEmpty
-                              ? const Color(0xFFAAEF00)
+                              ? theme.colorScheme.primary
                               : theme.colorScheme.onSurfaceVariant,
                           onPressed: () {
                             final name = textController.text.trim();
@@ -245,12 +240,10 @@ class _SettingsSectionState extends State<SettingsSection>
                       ),
                     ),
                     const SizedBox(height: 20),
-                    Container(
-                      height: 240,
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.surfaceContainerHighest,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
+                    Card(
+                      margin: EdgeInsets.zero,
+                      child: SizedBox(
+                        height: 240,
                       child: ListView.separated(
                         itemCount: walletProvider.payees.length,
                         separatorBuilder: (context, index) => Divider(
@@ -263,13 +256,13 @@ class _SettingsSectionState extends State<SettingsSection>
                           return ListTile(
                             leading: CircleAvatar(
                               backgroundColor: isMe
-                                  ? const Color(0xFFAAEF00)
+                                  ? theme.colorScheme.primary
                                   : theme.colorScheme.primaryContainer,
                               child: Text(
                                 p[0].toUpperCase(),
                                 style: TextStyle(
                                   color: isMe
-                                      ? Colors.black
+                                      ? theme.colorScheme.onPrimary
                                       : theme.colorScheme.onPrimaryContainer,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -285,21 +278,25 @@ class _SettingsSectionState extends State<SettingsSection>
                               ),
                             ),
                             trailing: isMe
-                                ? Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                      vertical: 4,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0x33AAEF00),
+                                ? Card(
+                                    color: theme.colorScheme.primaryContainer.withValues(alpha: 0.2),
+                                    elevation: 0,
+                                    margin: EdgeInsets.zero,
+                                    shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
                                     ),
-                                    child: const Text(
-                                      'DEFAULT',
-                                      style: TextStyle(
-                                        color: Color(0xFFAAEF00),
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.w800,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 4,
+                                      ),
+                                      child: Text(
+                                        'DEFAULT',
+                                        style: TextStyle(
+                                          color: theme.colorScheme.primary,
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w800,
+                                        ),
                                       ),
                                     ),
                                   )
@@ -317,6 +314,7 @@ class _SettingsSectionState extends State<SettingsSection>
                         },
                       ),
                     ),
+                    ),
                   ],
                 ),
               );
@@ -325,13 +323,6 @@ class _SettingsSectionState extends State<SettingsSection>
           actions: [
             FilledButton(
               onPressed: () => Navigator.of(context).pop(),
-              style: FilledButton.styleFrom(
-                backgroundColor: const Color(0xFFAAEF00),
-                foregroundColor: Colors.black,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
               child: const Text(
                 'Done',
                 style: TextStyle(fontWeight: FontWeight.w800),
@@ -400,12 +391,10 @@ class _SettingsSectionState extends State<SettingsSection>
                       child: IconButton(
                         icon: Icon(
                           isDark ? Icons.wb_sunny : Icons.nightlight_round,
-                          color: isDark ? Colors.black : Colors.white,
+                          color: theme.colorScheme.onPrimaryContainer,
                         ),
                         style: IconButton.styleFrom(
-                          backgroundColor: isDark
-                              ? const Color(0xFFAAEF00)
-                              : const Color(0xFF1C1C1C),
+                          backgroundColor: theme.colorScheme.primaryContainer,
                         ),
                         onPressed: uiProvider.toggleTheme,
                       ),
@@ -495,21 +484,16 @@ class _SettingsSectionState extends State<SettingsSection>
 
                 const SizedBox(height: 12),
                 _SectionLabel(label: 'SECURITY'),
-                Container(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
+                Card(
                   child: ListTile(
                     leading: Container(
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: const Color(0xFFAAEF00),
+                        color: theme.colorScheme.primaryContainer,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Icon(Icons.fingerprint, color: Colors.black),
+                      child: Icon(Icons.fingerprint, color: theme.colorScheme.onPrimaryContainer),
                     ),
                     title: const Text(
                       'App Lock',
@@ -522,19 +506,19 @@ class _SettingsSectionState extends State<SettingsSection>
                     trailing: Switch(
                       value: uiProvider.isAppLockEnabled,
                       onChanged: (val) => _toggleAppLock(context, uiProvider),
-                      activeThumbColor: const Color(0xFFAAEF00),
+                      activeThumbColor: theme.colorScheme.primaryContainer,
                     ),
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.surfaceContainerHighest,
+                Card(
+                  shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: theme.colorScheme.outlineVariant),
+                    side: BorderSide(color: theme.colorScheme.outlineVariant),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
                         'MyBanks Security',
@@ -593,6 +577,7 @@ class _SettingsSectionState extends State<SettingsSection>
                     ],
                   ),
                 ),
+              ),
 
                 const SizedBox(height: 24),
                 Text(
@@ -661,22 +646,17 @@ class _SetupCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(16),
-      ),
+    return Card(
       child: ListTile(
         onTap: onPress,
         leading: Container(
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: const Color(0xFFAAEF00),
+            color: Theme.of(context).colorScheme.primaryContainer,
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Icon(icon, color: Colors.black),
+          child: Icon(icon, color: Theme.of(context).colorScheme.onPrimaryContainer),
         ),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
         subtitle: Text(subtitle, style: const TextStyle(fontSize: 12)),

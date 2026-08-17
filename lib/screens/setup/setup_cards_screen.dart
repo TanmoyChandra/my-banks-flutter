@@ -61,7 +61,7 @@ class _SetupCardsScreenState extends State<SetupCardsScreen> {
   }
 
   void _handleEdit(CardEntry card) {
-    _type = card.type ?? 'Debit';
+    _type = card.type;
     _network = card.network ?? 'Visa';
     _bankName = card.bankName;
     _holderNameController.text = card.holderName;
@@ -165,7 +165,6 @@ class _SetupCardsScreenState extends State<SetupCardsScreen> {
 
   Widget _buildNetworkBtn(String key, String label, String logoPath) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
     final isSelected = _network == key;
     return Expanded(
       child: GestureDetector(
@@ -176,12 +175,12 @@ class _SetupCardsScreenState extends State<SetupCardsScreen> {
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: isSelected
-                  ? const Color(0xFFAAEF00)
+                  ? theme.colorScheme.primary
                   : theme.colorScheme.outline,
               width: 1.5,
             ),
             color: isSelected
-                ? (isDark ? const Color(0xFF1A1A1A) : const Color(0xFFF5F5F5))
+                ? theme.colorScheme.surfaceContainer
                 : Colors.transparent,
           ),
           child: Column(
@@ -208,7 +207,6 @@ class _SetupCardsScreenState extends State<SetupCardsScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
     final walletProvider = context.watch<WalletProvider>();
     final cards = walletProvider.cards;
 
@@ -228,20 +226,10 @@ class _SetupCardsScreenState extends State<SetupCardsScreen> {
       body: _showForm
           ? SingleChildScrollView(
               padding: const EdgeInsets.all(20),
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Column(
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -263,15 +251,17 @@ class _SetupCardsScreenState extends State<SetupCardsScreen> {
                       style: ButtonStyle(
                         backgroundColor: WidgetStateProperty.resolveWith<Color>(
                           (states) {
-                            if (states.contains(WidgetState.selected))
-                              return const Color(0xFFAAEF00);
+                            if (states.contains(WidgetState.selected)) {
+                              return theme.colorScheme.primaryContainer;
+                            }
                             return Colors.transparent;
                           },
                         ),
                         foregroundColor: WidgetStateProperty.resolveWith<Color>(
                           (states) {
-                            if (states.contains(WidgetState.selected))
-                              return Colors.black;
+                            if (states.contains(WidgetState.selected)) {
+                              return theme.colorScheme.onPrimaryContainer;
+                            }
                             return theme.colorScheme.onSurface;
                           },
                         ),
@@ -308,7 +298,6 @@ class _SetupCardsScreenState extends State<SetupCardsScreen> {
                           controller: TextEditingController(text: _bankName),
                           decoration: const InputDecoration(
                             labelText: 'Bank Name *',
-                            border: OutlineInputBorder(),
                             suffixIcon: Icon(Icons.keyboard_arrow_down),
                           ),
                           style: const TextStyle(fontSize: 14),
@@ -320,7 +309,6 @@ class _SetupCardsScreenState extends State<SetupCardsScreen> {
                       controller: _holderNameController,
                       decoration: const InputDecoration(
                         labelText: 'Card Holder Name *',
-                        border: OutlineInputBorder(),
                       ),
                       style: const TextStyle(fontSize: 14),
                     ),
@@ -329,7 +317,6 @@ class _SetupCardsScreenState extends State<SetupCardsScreen> {
                       controller: _cardNumberController,
                       decoration: const InputDecoration(
                         labelText: 'Card Number *',
-                        border: OutlineInputBorder(),
                       ),
                       keyboardType: TextInputType.number,
                       maxLength: 19,
@@ -362,7 +349,6 @@ class _SetupCardsScreenState extends State<SetupCardsScreen> {
                             controller: _expiryController,
                             decoration: const InputDecoration(
                               labelText: 'Expiry (MM/YY) *',
-                              border: OutlineInputBorder(),
                             ),
                             keyboardType: TextInputType.number,
                             maxLength: 5,
@@ -390,7 +376,6 @@ class _SetupCardsScreenState extends State<SetupCardsScreen> {
                             controller: _cvvController,
                             decoration: const InputDecoration(
                               labelText: 'CVV',
-                              border: OutlineInputBorder(),
                             ),
                             keyboardType: TextInputType.number,
                             maxLength: 4,
@@ -404,7 +389,6 @@ class _SetupCardsScreenState extends State<SetupCardsScreen> {
                       controller: _nicknameController,
                       decoration: const InputDecoration(
                         labelText: 'Nickname',
-                        border: OutlineInputBorder(),
                       ),
                       style: const TextStyle(fontSize: 14),
                     ),
@@ -414,7 +398,6 @@ class _SetupCardsScreenState extends State<SetupCardsScreen> {
                         controller: _billingDateController,
                         decoration: const InputDecoration(
                           labelText: 'Billing Date (1-31)',
-                          border: OutlineInputBorder(),
                           hintText: 'e.g. 5',
                         ),
                         keyboardType: TextInputType.number,
@@ -426,7 +409,6 @@ class _SetupCardsScreenState extends State<SetupCardsScreen> {
                         controller: _dueDaysController,
                         decoration: const InputDecoration(
                           labelText: 'Due After Billing (Days)',
-                          border: OutlineInputBorder(),
                           hintText: 'e.g. 15',
                         ),
                         keyboardType: TextInputType.number,
@@ -460,7 +442,7 @@ class _SetupCardsScreenState extends State<SetupCardsScreen> {
                               height: 44,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: c.via,
+                                color: c.base(context),
                                 border: Border.all(
                                   color: isSelected
                                       ? theme.colorScheme.onSurface
@@ -469,9 +451,9 @@ class _SetupCardsScreenState extends State<SetupCardsScreen> {
                                 ),
                               ),
                               child: isSelected
-                                  ? const Icon(
+                                  ? Icon(
                                       Icons.check,
-                                      color: Colors.white,
+                                      color: c.onBase(context),
                                       size: 20,
                                     )
                                   : null,
@@ -499,6 +481,7 @@ class _SetupCardsScreenState extends State<SetupCardsScreen> {
                       ],
                     ),
                   ],
+                ),
                 ),
               ),
             )
@@ -532,7 +515,6 @@ class _SetupCardsScreenState extends State<SetupCardsScreen> {
                   )
                 else
                   ...cards.map((card) {
-                    final isDarkInner = theme.brightness == Brightness.dark;
                     return Dismissible(
                       key: Key(card.id),
                       direction: DismissDirection.endToStart,
@@ -570,31 +552,30 @@ class _SetupCardsScreenState extends State<SetupCardsScreen> {
                     );
                   }),
                 const SizedBox(height: 20),
-                GestureDetector(
-                  onTap: () => setState(() => _showForm = true),
-                  child: Container(
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFF2A2A2A) : Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.add_circle,
-                          size: 36,
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'Add New Card',
-                          style: TextStyle(
+                Card(
+                  child: InkWell(
+                    onTap: () => setState(() => _showForm = true),
+                    borderRadius: BorderRadius.circular(12),
+                    child: SizedBox(
+                      height: 80,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.add_circle,
+                            size: 36,
                             color: theme.colorScheme.onSurfaceVariant,
-                            fontWeight: FontWeight.w600,
                           ),
-                        ),
-                      ],
+                          const SizedBox(height: 4),
+                          Text(
+                            'Add New Card',
+                            style: TextStyle(
+                              color: theme.colorScheme.onSurfaceVariant,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

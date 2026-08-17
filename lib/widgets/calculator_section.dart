@@ -99,7 +99,6 @@ class _CalculatorSectionState extends State<CalculatorSection> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final uiProvider = context.watch<UiProvider>();
-    final isDark = theme.brightness == Brightness.dark;
     final initials = uiProvider.userName.isNotEmpty
         ? uiProvider.userName[0].toUpperCase()
         : '?';
@@ -130,9 +129,7 @@ class _CalculatorSectionState extends State<CalculatorSection> {
                       Text(
                         'Quickly calculate percentages with ease.',
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: isDark
-                              ? const Color(0xFFA1A1AA)
-                              : const Color(0xFF52525B),
+                          color: theme.colorScheme.onSurfaceVariant,
                         ),
                       ),
                     ],
@@ -202,33 +199,23 @@ class _CalculatorSectionState extends State<CalculatorSection> {
                   onCalculate: _handleCalc3,
                   onCopy: () => _copyToClipboard(_c3Res),
                 ),
-                Container(
+                Card(
                   margin: const EdgeInsets.only(top: 8),
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: isDark ? const Color(0xFF161616) : Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: isDark
-                          ? const Color(0xFF2C2C2E)
-                          : const Color(0xFFE5E5EA),
-                    ),
-                  ),
-                  child: Row(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
                         width: 34,
                         height: 34,
                         decoration: BoxDecoration(
-                          color: isDark
-                              ? const Color(0x14AAEF00)
-                              : const Color(0x33AAEF00),
+                          color: theme.colorScheme.primaryContainer,
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.lightbulb_outline,
-                          color: Color(0xFFAAEF00),
+                          color: theme.colorScheme.onPrimaryContainer,
                           size: 18,
                         ),
                       ),
@@ -237,10 +224,10 @@ class _CalculatorSectionState extends State<CalculatorSection> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
+                            Text(
                               'How it works',
                               style: TextStyle(
-                                color: Color(0xFFAAEF00),
+                                color: theme.colorScheme.primary,
                                 fontWeight: FontWeight.w700,
                                 fontSize: 14,
                               ),
@@ -260,6 +247,7 @@ class _CalculatorSectionState extends State<CalculatorSection> {
                     ],
                   ),
                 ),
+              ),
               ],
             ),
           ),
@@ -299,26 +287,11 @@ class _CalcCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final accentColor = const Color(0xFFAAEF00);
-    final cardBg = isDark ? const Color(0xFF161616) : Colors.white;
-    final borderColor = isDark
-        ? const Color(0xFF2C2C2E)
-        : const Color(0xFFE5E5EA);
-    final inputBg = isDark ? const Color(0xFF101010) : const Color(0xFFF2F2F7);
-    final inputBorderColor = isDark
-        ? const Color(0xFF242424)
-        : const Color(0xFFD1D1D6);
-
-    return Container(
+    return Card(
       margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: cardBg,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: borderColor),
-      ),
-      child: Column(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
         children: [
           Row(
             children: [
@@ -326,12 +299,10 @@ class _CalcCard extends StatelessWidget {
                 width: 34,
                 height: 34,
                 decoration: BoxDecoration(
-                  color: isDark
-                      ? const Color(0x14AAEF00)
-                      : const Color(0x33AAEF00),
+                  color: theme.colorScheme.primaryContainer,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(icon, color: accentColor, size: 18),
+                child: Icon(icon, color: theme.colorScheme.onPrimaryContainer, size: 18),
               ),
               const SizedBox(width: 12),
               Text(
@@ -360,8 +331,6 @@ class _CalcCard extends StatelessWidget {
                 child: _StyledTextField(
                   controller: xController,
                   placeholder: xPlaceholder,
-                  inputBg: inputBg,
-                  borderColor: inputBorderColor,
                 ),
               ),
               Padding(
@@ -378,8 +347,6 @@ class _CalcCard extends StatelessWidget {
                 child: _StyledTextField(
                   controller: yController,
                   placeholder: yPlaceholder,
-                  inputBg: inputBg,
-                  borderColor: inputBorderColor,
                 ),
               ),
               Padding(
@@ -406,17 +373,7 @@ class _CalcCard extends StatelessWidget {
                       FocusScope.of(context).unfocus();
                       onCalculate();
                     },
-                    style: FilledButton.styleFrom(
-                      backgroundColor: accentColor,
-                      foregroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: const Text(
-                      'Calculate',
-                      style: TextStyle(fontWeight: FontWeight.w700),
-                    ),
+                    child: const Text('Calculate'),
                   ),
                 ),
               ),
@@ -426,8 +383,8 @@ class _CalcCard extends StatelessWidget {
                 child: Container(
                   height: 44,
                   decoration: BoxDecoration(
-                    color: inputBg,
-                    border: Border.all(color: inputBorderColor),
+                    color: theme.colorScheme.surfaceContainerHighest,
+                    border: Border.all(color: theme.colorScheme.outlineVariant),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   padding: const EdgeInsets.only(left: 12, right: 4),
@@ -439,7 +396,7 @@ class _CalcCard extends StatelessWidget {
                           style: TextStyle(
                             color: resultValue.isNotEmpty
                                 ? theme.colorScheme.onSurface
-                                : const Color(0xFF6A6A6C),
+                                : theme.colorScheme.onSurfaceVariant,
                             fontSize: 14,
                           ),
                           maxLines: 1,
@@ -448,7 +405,7 @@ class _CalcCard extends StatelessWidget {
                       ),
                       IconButton(
                         icon: const Icon(Icons.copy, size: 18),
-                        color: const Color(0xFF6A6A6C),
+                        color: theme.colorScheme.onSurfaceVariant,
                         onPressed: onCopy,
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
@@ -461,6 +418,7 @@ class _CalcCard extends StatelessWidget {
           ),
         ],
       ),
+      ),
     );
   }
 }
@@ -468,14 +426,10 @@ class _CalcCard extends StatelessWidget {
 class _StyledTextField extends StatelessWidget {
   final TextEditingController controller;
   final String placeholder;
-  final Color inputBg;
-  final Color borderColor;
 
   const _StyledTextField({
     required this.controller,
     required this.placeholder,
-    required this.inputBg,
-    required this.borderColor,
   });
 
   @override
@@ -488,24 +442,7 @@ class _StyledTextField extends StatelessWidget {
         style: const TextStyle(fontSize: 13),
         decoration: InputDecoration(
           hintText: placeholder,
-          hintStyle: const TextStyle(color: Color(0xFF6A6A6C), fontSize: 13),
-          filled: true,
-          fillColor: inputBg,
           contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: borderColor),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: borderColor),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
         ),
       ),
     );

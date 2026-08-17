@@ -45,7 +45,6 @@ class _QRSectionState extends State<QRSection>
     final walletProvider = context.watch<WalletProvider>();
     final entries = walletProvider.upis;
 
-    final insets = MediaQuery.of(context).padding;
     final String initials = uiProvider.userName.isNotEmpty
         ? uiProvider.userName[0].toUpperCase()
         : '?';
@@ -76,9 +75,7 @@ class _QRSectionState extends State<QRSection>
                       Text(
                         'Easily share your QR codes to receive payments from any UPI app.',
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.brightness == Brightness.dark
-                              ? const Color(0xFFA1A1AA)
-                              : const Color(0xFF52525B),
+                          color: theme.colorScheme.onSurfaceVariant,
                         ),
                       ),
                     ],
@@ -115,9 +112,7 @@ class _QRSectionState extends State<QRSection>
             child: Container(
               height: 40,
               decoration: BoxDecoration(
-                color: theme.brightness == Brightness.dark
-                    ? const Color(0xFF2A2A2A)
-                    : const Color(0xFFF2F2F7),
+                color: theme.colorScheme.surfaceContainer,
                 borderRadius: BorderRadius.circular(12),
               ),
               padding: const EdgeInsets.all(4),
@@ -128,7 +123,7 @@ class _QRSectionState extends State<QRSection>
                   borderRadius: BorderRadius.circular(8),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.1),
+                      color: theme.colorScheme.shadow.withValues(alpha: 0.1),
                       blurRadius: 4,
                       offset: const Offset(0, 2),
                     ),
@@ -137,7 +132,7 @@ class _QRSectionState extends State<QRSection>
                 indicatorSize: TabBarIndicatorSize.tab,
                 dividerColor: Colors.transparent,
                 labelColor: theme.colorScheme.onSurface,
-                unselectedLabelColor: const Color(0xFF8E8E93),
+                unselectedLabelColor: theme.colorScheme.onSurfaceVariant,
                 labelStyle: theme.textTheme.labelLarge?.copyWith(
                   fontWeight: FontWeight.w700,
                 ),
@@ -211,40 +206,38 @@ class _MyQRCodes extends StatelessWidget {
       itemBuilder: (context, index) {
         if (index == entries.length) {
           // Add new placeholder
-          return Padding(
-            padding: const EdgeInsets.only(right: 12.0),
-            child: GestureDetector(
-              onTap: () => context.push('/main/setup-qr'),
-              child: Container(
-                width: cardWidth,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? const Color(0xFF2A2A2A)
-                      : Colors.white,
+          return SizedBox(
+            width: cardWidth,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 12.0),
+              child: Card(
+                margin: EdgeInsets.zero,
+                child: InkWell(
+                  onTap: () => context.push('/main/setup-qr'),
                   borderRadius: BorderRadius.circular(16),
-                ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircleAvatar(
-                        radius: 32,
-                        backgroundColor: Colors.transparent,
-                        child: Icon(
-                          Icons.add,
-                          size: 32,
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircleAvatar(
+                          radius: 32,
+                          backgroundColor: Colors.transparent,
+                          child: Icon(
+                            Icons.add,
+                            size: 32,
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'Add new QR code',
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          fontWeight: FontWeight.w600,
+                        const SizedBox(height: 16),
+                        Text(
+                          'Add new QR code',
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -333,15 +326,18 @@ class _QRPayCardState extends State<_QRPayCard> {
         children: [
           RepaintBoundary(
             key: _qrKey,
-            child: Container(
-              width: widget.width,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 32),
-              decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceContainerHighest,
+            child: Card(
+              margin: EdgeInsets.zero,
+              color: theme.colorScheme.surfaceContainerHighest,
+              shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: theme.colorScheme.outlineVariant),
+                side: BorderSide(color: theme.colorScheme.outlineVariant),
               ),
-              child: Column(
+              child: SizedBox(
+                width: widget.width,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 32),
+                  child: Column(
                 children: [
                   Text(
                     title,
@@ -363,7 +359,7 @@ class _QRPayCardState extends State<_QRPayCard> {
                   Text(
                     'Scan to pay with any UPI app',
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: const Color(0xFF6B6F76),
+                      color: theme.colorScheme.onSurfaceVariant,
                       fontSize: 10,
                     ),
                   ),
@@ -376,9 +372,9 @@ class _QRPayCardState extends State<_QRPayCard> {
                         height: 25,
                         margin: const EdgeInsets.only(right: 6),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: theme.colorScheme.surface,
                           borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: const Color(0xFFECE6F0)),
+                          border: Border.all(color: theme.colorScheme.outlineVariant),
                         ),
                         alignment: Alignment.center,
                         child: bank != null
@@ -393,8 +389,8 @@ class _QRPayCardState extends State<_QRPayCard> {
                                         : title)
                                     .substring(0, 2)
                                     .toUpperCase(),
-                                style: const TextStyle(
-                                  color: Colors.black,
+                                style: TextStyle(
+                                  color: theme.colorScheme.onSurface,
                                   fontWeight: FontWeight.w800,
                                   fontSize: 12,
                                 ),
@@ -445,30 +441,17 @@ class _QRPayCardState extends State<_QRPayCard> {
                   ),
                 ],
               ),
+              ),
+              ),
             ),
           ),
           const SizedBox(height: 16),
           SizedBox(
             width: widget.width,
-            child: FilledButton.icon(
+            child: FilledButton.tonalIcon(
               onPressed: _handleShare,
               icon: const Icon(Icons.share_outlined),
-              label: Text(
-                'Share QR code',
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.w900,
-                  fontSize: 16,
-                  color: theme.colorScheme.onPrimaryContainer,
-                ),
-              ),
-              style: FilledButton.styleFrom(
-                backgroundColor: theme.colorScheme.primaryContainer,
-                foregroundColor: theme.colorScheme.onPrimaryContainer,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24),
-                ),
-              ),
+              label: const Text('Share QR code'),
             ),
           ),
         ],

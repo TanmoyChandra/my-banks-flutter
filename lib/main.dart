@@ -4,6 +4,7 @@ import 'providers/ui_provider.dart';
 import 'providers/wallet_provider.dart';
 import 'theme/app_theme.dart';
 import 'navigation/app_router.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,13 +26,17 @@ class MyBanksApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<UiProvider>(
       builder: (context, uiProvider, child) {
-        return MaterialApp.router(
-          title: 'My Banks',
-          theme: AppTheme.lightTheme,
-          darkTheme: AppTheme.darkTheme,
-          themeMode: uiProvider.isDark ? ThemeMode.dark : ThemeMode.light,
-          routerConfig: AppRouter.getRouter(uiProvider),
-          debugShowCheckedModeBanner: false,
+        return DynamicColorBuilder(
+          builder: (lightDynamic, darkDynamic) {
+            return MaterialApp.router(
+              title: 'My Banks',
+              theme: AppTheme.lightTheme(lightDynamic),
+              darkTheme: AppTheme.darkTheme(darkDynamic),
+              themeMode: uiProvider.isDark ? ThemeMode.dark : ThemeMode.light,
+              routerConfig: AppRouter.getRouter(uiProvider),
+              debugShowCheckedModeBanner: false,
+            );
+          },
         );
       },
     );

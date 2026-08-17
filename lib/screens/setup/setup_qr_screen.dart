@@ -136,10 +136,11 @@ class _SetupQRScreenState extends State<SetupQRScreen> {
   }
 
   void _showError(String message) {
-    if (mounted)
+    if (mounted) {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(message)));
+    }
   }
 
   void _showBankPicker() {
@@ -188,7 +189,6 @@ class _SetupQRScreenState extends State<SetupQRScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
     final walletProvider = context.watch<WalletProvider>();
     final entries = walletProvider.upis;
 
@@ -210,20 +210,10 @@ class _SetupQRScreenState extends State<SetupQRScreen> {
           : _showForm
           ? SingleChildScrollView(
               padding: const EdgeInsets.all(20),
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Column(
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -238,7 +228,6 @@ class _SetupQRScreenState extends State<SetupQRScreen> {
                       controller: _nameController,
                       decoration: const InputDecoration(
                         labelText: 'Name',
-                        border: OutlineInputBorder(),
                       ),
                       style: const TextStyle(fontSize: 14),
                     ),
@@ -250,7 +239,6 @@ class _SetupQRScreenState extends State<SetupQRScreen> {
                           controller: TextEditingController(text: _bankName),
                           decoration: const InputDecoration(
                             labelText: 'Bank Name',
-                            border: OutlineInputBorder(),
                             suffixIcon: Icon(Icons.keyboard_arrow_down),
                           ),
                           style: const TextStyle(fontSize: 14),
@@ -262,7 +250,6 @@ class _SetupQRScreenState extends State<SetupQRScreen> {
                       controller: _upiIdController,
                       decoration: const InputDecoration(
                         labelText: 'UPI ID',
-                        border: OutlineInputBorder(),
                       ),
                       style: const TextStyle(fontSize: 14),
                     ),
@@ -271,7 +258,6 @@ class _SetupQRScreenState extends State<SetupQRScreen> {
                       controller: _qrValueController,
                       decoration: const InputDecoration(
                         labelText: 'QR Value',
-                        border: OutlineInputBorder(),
                       ),
                       maxLines: 3,
                       style: const TextStyle(fontSize: 14),
@@ -281,7 +267,6 @@ class _SetupQRScreenState extends State<SetupQRScreen> {
                       controller: _mobileNumberController,
                       decoration: const InputDecoration(
                         labelText: 'Mobile Number',
-                        border: OutlineInputBorder(),
                       ),
                       keyboardType: TextInputType.phone,
                       style: const TextStyle(fontSize: 14),
@@ -305,6 +290,7 @@ class _SetupQRScreenState extends State<SetupQRScreen> {
                       ],
                     ),
                   ],
+                ),
                 ),
               ),
             )
@@ -389,66 +375,60 @@ class _SetupQRScreenState extends State<SetupQRScreen> {
                 Row(
                   children: [
                     Expanded(
-                      child: GestureDetector(
-                        onTap: _pickAndScan,
-                        child: Container(
-                          height: 100,
-                          decoration: BoxDecoration(
-                            color: isDark
-                                ? const Color(0xFF2A2A2A)
-                                : Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.image,
-                                size: 36,
-                                color: theme.colorScheme.onSurfaceVariant,
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                'Scan from Gallery',
-                                style: TextStyle(
+                      child: Card(
+                        child: InkWell(
+                          onTap: _pickAndScan,
+                          borderRadius: BorderRadius.circular(12),
+                          child: SizedBox(
+                            height: 100,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.image,
+                                  size: 36,
                                   color: theme.colorScheme.onSurfaceVariant,
-                                  fontWeight: FontWeight.w600,
                                 ),
-                              ),
-                            ],
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Scan from Gallery',
+                                  style: TextStyle(
+                                    color: theme.colorScheme.onSurfaceVariant,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: GestureDetector(
-                        onTap: () => setState(() => _showForm = true),
-                        child: Container(
-                          height: 100,
-                          decoration: BoxDecoration(
-                            color: isDark
-                                ? const Color(0xFF2A2A2A)
-                                : Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.edit,
-                                size: 36,
-                                color: theme.colorScheme.onSurfaceVariant,
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                'Manual Entry',
-                                style: TextStyle(
+                      child: Card(
+                        child: InkWell(
+                          onTap: () => setState(() => _showForm = true),
+                          borderRadius: BorderRadius.circular(12),
+                          child: SizedBox(
+                            height: 100,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.edit,
+                                  size: 36,
                                   color: theme.colorScheme.onSurfaceVariant,
-                                  fontWeight: FontWeight.w600,
                                 ),
-                              ),
-                            ],
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Manual Entry',
+                                  style: TextStyle(
+                                    color: theme.colorScheme.onSurfaceVariant,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),

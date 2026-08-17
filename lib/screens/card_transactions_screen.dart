@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../providers/wallet_provider.dart';
@@ -54,7 +53,7 @@ class _CardTransactionsScreenState extends State<CardTransactionsScreen>
           (c) => c.key == cardColorStr,
           orElse: () => cardColors.first,
         )
-        .via;
+        .base(context);
 
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
@@ -163,11 +162,11 @@ class _TransactionsTabState extends State<_TransactionsTab> {
                     child: ListTile(
                       leading: CircleAvatar(
                         backgroundColor: isCredit
-                            ? Colors.green.withValues(alpha: 0.1)
-                            : Colors.red.withValues(alpha: 0.1),
+                            ? theme.colorScheme.tertiaryContainer
+                            : theme.colorScheme.errorContainer,
                         child: Icon(
                           isCredit ? Icons.arrow_downward : Icons.arrow_upward,
-                          color: isCredit ? Colors.green : Colors.red,
+                          color: isCredit ? theme.colorScheme.onTertiaryContainer : theme.colorScheme.onErrorContainer,
                         ),
                       ),
                       title: Text(
@@ -183,7 +182,7 @@ class _TransactionsTabState extends State<_TransactionsTab> {
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                           color: isCredit
-                              ? Colors.green
+                              ? theme.colorScheme.tertiary
                               : theme.colorScheme.onSurface,
                         ),
                       ),
@@ -197,7 +196,7 @@ class _TransactionsTabState extends State<_TransactionsTab> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showTransactionForm(context),
         backgroundColor: widget.cardColor,
-        child: const Icon(Icons.add, color: Colors.black),
+        child: Icon(Icons.add, color: theme.colorScheme.onPrimary),
       ),
     );
   }
@@ -310,7 +309,6 @@ class _TransactionFormState extends State<_TransactionForm> {
             controller: _descController,
             decoration: const InputDecoration(
               labelText: 'Description',
-              border: OutlineInputBorder(),
             ),
           ),
           const SizedBox(height: 12),
@@ -318,7 +316,6 @@ class _TransactionFormState extends State<_TransactionForm> {
             controller: _amountController,
             decoration: const InputDecoration(
               labelText: 'Amount',
-              border: OutlineInputBorder(),
             ),
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
           ),
@@ -327,7 +324,6 @@ class _TransactionFormState extends State<_TransactionForm> {
             controller: _payeeController,
             decoration: const InputDecoration(
               labelText: 'Payee / Merchant',
-              border: OutlineInputBorder(),
             ),
           ),
           const SizedBox(height: 12),
@@ -355,7 +351,6 @@ class _TransactionFormState extends State<_TransactionForm> {
               initialValue: _billingCycleId,
               decoration: const InputDecoration(
                 labelText: 'Billing Cycle',
-                border: OutlineInputBorder(),
               ),
               items: [
                 const DropdownMenuItem(value: null, child: Text('None')),
@@ -395,7 +390,6 @@ class _BillingCyclesTab extends StatelessWidget {
         content: TextField(
           decoration: const InputDecoration(
             labelText: 'Cycle Name (e.g. Sep 2024)',
-            border: OutlineInputBorder(),
           ),
           onChanged: (v) => name = v,
         ),
@@ -489,7 +483,7 @@ class _BillingCyclesTab extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showCycleForm(context, wallet),
         backgroundColor: cardColor,
-        child: const Icon(Icons.add, color: Colors.black),
+        child: Icon(Icons.add, color: theme.colorScheme.onPrimary),
       ),
     );
   }

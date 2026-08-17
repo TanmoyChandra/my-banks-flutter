@@ -81,7 +81,7 @@ class _IconSplashScreenState extends State<_IconSplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF000000), // Match main app dark theme
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Center(
         child: AnimatedBuilder(
           animation: _controller,
@@ -163,7 +163,7 @@ class _UserEntryScreenState extends State<_UserEntryScreen>
     final isNameEmpty = _nameController.text.trim().isEmpty;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF111111),
+      backgroundColor: theme.colorScheme.surface,
       body: Padding(
         padding: EdgeInsets.only(
           top: insets.top + 20,
@@ -206,7 +206,7 @@ class _UserEntryScreenState extends State<_UserEntryScreen>
                         Text(
                           'Welcome to My Banks',
                           style: theme.textTheme.headlineLarge?.copyWith(
-                            color: Colors.white,
+                            color: theme.colorScheme.onSurface,
                             fontWeight: FontWeight.w900,
                             letterSpacing: -1,
                           ),
@@ -216,7 +216,7 @@ class _UserEntryScreenState extends State<_UserEntryScreen>
                         Text(
                           'Enter your name to personalize the app. No password, OTP, or account setup needed.',
                           style: theme.textTheme.bodyLarge?.copyWith(
-                            color: const Color(0xFFA1A1AA),
+                            color: theme.colorScheme.onSurfaceVariant,
                             fontWeight: FontWeight.w500,
                           ),
                           textAlign: TextAlign.center,
@@ -226,39 +226,13 @@ class _UserEntryScreenState extends State<_UserEntryScreen>
                           controller: _nameController,
                           autofocus: true,
                           style: theme.textTheme.bodyLarge?.copyWith(
-                            color: Colors.white,
+                            color: theme.colorScheme.onSurface,
                             fontWeight: FontWeight.w700,
                             fontSize: 18,
                           ),
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             labelText: 'Your name',
                             hintText: 'Alex Morgan',
-                            labelStyle: const TextStyle(
-                              color: Color(0xFF71717A),
-                            ),
-                            hintStyle: const TextStyle(
-                              color: Color(0xFF71717A),
-                            ),
-                            filled: true,
-                            fillColor: const Color(0xFF1A1A1A),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(16),
-                              borderSide: const BorderSide(
-                                color: Color(0xFF3F3F46),
-                              ),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(16),
-                              borderSide: const BorderSide(
-                                color: Color(0xFF3F3F46),
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(16),
-                              borderSide: const BorderSide(
-                                color: Color(0xFFAAEF00),
-                              ),
-                            ),
                           ),
                           onSubmitted: (_) => _handleSubmit(),
                         ),
@@ -280,23 +254,13 @@ class _UserEntryScreenState extends State<_UserEntryScreen>
                   child: FilledButton(
                     onPressed: isNameEmpty ? null : _handleSubmit,
                     style: FilledButton.styleFrom(
-                      backgroundColor: theme.colorScheme.primaryContainer,
-                      foregroundColor: theme.colorScheme.onPrimaryContainer,
-                      disabledBackgroundColor: theme
-                          .colorScheme
-                          .primaryContainer
-                          .withValues(alpha: 0.5),
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(32),
-                      ),
                     ),
                     child: Text(
                       'Enter App',
                       style: theme.textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.w900,
                         fontSize: 18,
-                        color: Colors.black,
                       ),
                     ),
                   ),

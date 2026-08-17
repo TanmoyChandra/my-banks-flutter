@@ -50,9 +50,7 @@ class BankAccountsSection extends StatelessWidget {
                       Text(
                         'Keep IFSC and account details easy to find.',
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.brightness == Brightness.dark
-                              ? const Color(0xFFA1A1AA)
-                              : const Color(0xFF52525B),
+                          color: theme.colorScheme.onSurfaceVariant,
                         ),
                       ),
                     ],
@@ -84,44 +82,34 @@ class BankAccountsSection extends StatelessWidget {
               itemCount: accounts.length + 1,
               itemBuilder: (context, index) {
                 if (index == accounts.length) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    child: GestureDetector(
+                  return Card(
+                    child: InkWell(
                       onTap: () => context.push('/main/setup-accounts'),
+                      borderRadius: BorderRadius.circular(16),
                       child: Container(
                         height: 120,
-                        decoration: BoxDecoration(
-                          color: theme.brightness == Brightness.dark
-                              ? const Color(0xFF2A2A2A)
-                              : Colors.white,
-                          borderRadius: BorderRadius.circular(24),
-                        ),
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CircleAvatar(
-                                radius: 24,
-                                backgroundColor: Colors.transparent,
-                                child: Icon(
-                                  Icons.add,
-                                  size: 32,
-                                  color: theme.colorScheme.onSurfaceVariant,
-                                ),
+                        alignment: Alignment.center,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircleAvatar(
+                              radius: 24,
+                              backgroundColor: Colors.transparent,
+                              child: Icon(
+                                Icons.add,
+                                size: 32,
+                                color: theme.colorScheme.onSurfaceVariant,
                               ),
-                              const SizedBox(height: 8),
-                              Text(
-                                'Add bank account',
-                                style: theme.textTheme.bodyLarge?.copyWith(
-                                  color: theme.colorScheme.onSurfaceVariant,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Add bank account',
+                              style: theme.textTheme.bodyLarge?.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant,
+                                fontWeight: FontWeight.w600,
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -182,7 +170,8 @@ class _AccountItemState extends State<_AccountItem>
   Widget build(BuildContext context) {
     final bank = findBankByName(widget.account.bankName);
     final palette = getCardColors(widget.account.color);
-    final cardBg = palette.via;
+    final cardBg = palette.base(context);
+    final textCol = palette.onBase(context);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -206,7 +195,7 @@ class _AccountItemState extends State<_AccountItem>
                   height: 140,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white.withValues(alpha: 0.07),
+                    color: textCol.withValues(alpha: 0.07),
                   ),
                 ),
               ),
@@ -218,7 +207,7 @@ class _AccountItemState extends State<_AccountItem>
                   height: 90,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white.withValues(alpha: 0.05),
+                    color: textCol.withValues(alpha: 0.05),
                   ),
                 ),
               ),
@@ -232,7 +221,7 @@ class _AccountItemState extends State<_AccountItem>
                         width: 44,
                         height: 44,
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.12),
+                          color: textCol.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         alignment: Alignment.center,
@@ -248,8 +237,8 @@ class _AccountItemState extends State<_AccountItem>
                                 widget.account.bankName
                                     .substring(0, 2)
                                     .toUpperCase(),
-                                style: const TextStyle(
-                                  color: Colors.white,
+                                style: TextStyle(
+                                  color: textCol,
                                   fontWeight: FontWeight.w900,
                                   fontSize: 14,
                                 ),
@@ -261,8 +250,8 @@ class _AccountItemState extends State<_AccountItem>
                           children: [
                             Text(
                               widget.account.bankName,
-                              style: const TextStyle(
-                                color: Colors.white,
+                              style: TextStyle(
+                                color: textCol,
                                 fontWeight: FontWeight.w700,
                                 fontSize: 16,
                               ),
@@ -274,16 +263,16 @@ class _AccountItemState extends State<_AccountItem>
                                 vertical: 3,
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.25),
+                                color: textCol.withValues(alpha: 0.25),
                                 border: Border.all(
-                                  color: Colors.white.withValues(alpha: 0.5),
+                                  color: textCol.withValues(alpha: 0.5),
                                 ),
                                 borderRadius: BorderRadius.circular(16),
                               ),
                               child: Text(
                                 '${widget.account.accountType.toUpperCase()} ACCOUNT',
-                                style: const TextStyle(
-                                  color: Colors.white,
+                                style: TextStyle(
+                                  color: textCol,
                                   fontWeight: FontWeight.w800,
                                   fontSize: 10,
                                   letterSpacing: 1.5,
@@ -295,7 +284,7 @@ class _AccountItemState extends State<_AccountItem>
                       ),
                       IconButton(
                         icon: const Icon(Icons.share_outlined),
-                        color: Colors.white54,
+                        color: textCol.withValues(alpha: 0.54),
                         onPressed: _handleShare,
                       ),
                     ],
@@ -311,18 +300,18 @@ class _AccountItemState extends State<_AccountItem>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             'Account Number',
                             style: TextStyle(
-                              color: Colors.white54,
+                              color: textCol.withValues(alpha: 0.54),
                               fontSize: 11,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                           Text(
                             _formatAccountNumber(widget.account.accountNumber),
-                            style: const TextStyle(
-                              color: Colors.white,
+                            style: TextStyle(
+                              color: textCol,
                               fontSize: 19,
                               fontWeight: FontWeight.w700,
                               letterSpacing: 2,
@@ -338,28 +327,32 @@ class _AccountItemState extends State<_AccountItem>
                         children: [
                           Container(
                             height: 1,
-                            color: Colors.white.withValues(alpha: 0.12),
+                            color: textCol.withValues(alpha: 0.12),
                             margin: const EdgeInsets.only(bottom: 16),
                           ),
                           _buildInfoRow(
                             'ACCOUNT HOLDER',
                             widget.account.accountHolder,
                             () => _handleCopy(widget.account.accountHolder),
+                            textCol,
                           ),
                           _buildInfoRow(
                             'ACCOUNT NUMBER',
                             _formatAccountNumber(widget.account.accountNumber),
                             () => _handleCopy(widget.account.accountNumber),
+                            textCol,
                           ),
                           _buildInfoRow(
                             'IFSC CODE',
                             widget.account.ifsc.toUpperCase(),
                             () => _handleCopy(widget.account.ifsc),
+                            textCol,
                           ),
                           _buildInfoRow(
                             'BRANCH',
                             widget.account.branchName,
                             () => _handleCopy(widget.account.branchName),
+                            textCol,
                           ),
                         ],
                       ),
@@ -374,7 +367,7 @@ class _AccountItemState extends State<_AccountItem>
     );
   }
 
-  Widget _buildInfoRow(String label, String value, VoidCallback onCopy) {
+  Widget _buildInfoRow(String label, String value, VoidCallback onCopy, Color textCol) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: GestureDetector(
@@ -384,8 +377,8 @@ class _AccountItemState extends State<_AccountItem>
           children: [
             Text(
               label,
-              style: const TextStyle(
-                color: Colors.white54,
+              style: TextStyle(
+                color: textCol.withValues(alpha: 0.54),
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
               ),
@@ -393,8 +386,8 @@ class _AccountItemState extends State<_AccountItem>
             const SizedBox(height: 4),
             Text(
               value.isNotEmpty ? value : 'Not provided',
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: textCol,
                 fontSize: 15,
                 fontWeight: FontWeight.w700,
               ),

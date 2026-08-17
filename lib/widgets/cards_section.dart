@@ -21,7 +21,6 @@ class CardsSection extends StatelessWidget {
     final cards = walletProvider.cards;
     final transactions = walletProvider.transactions;
 
-    final insets = MediaQuery.of(context).padding;
     final initials = uiProvider.userName.isNotEmpty
         ? uiProvider.userName[0].toUpperCase()
         : '?';
@@ -52,9 +51,7 @@ class CardsSection extends StatelessWidget {
                       Text(
                         'Manage your payment cards and view transactions.',
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.brightness == Brightness.dark
-                              ? const Color(0xFFA1A1AA)
-                              : const Color(0xFF52525B),
+                          color: theme.colorScheme.onSurfaceVariant,
                         ),
                       ),
                     ],
@@ -147,9 +144,7 @@ class CardsSection extends StatelessWidget {
           width: cardWidth,
           height: cardHeight,
           decoration: BoxDecoration(
-            color: theme.brightness == Brightness.dark
-                ? const Color(0xFF2A2A2A)
-                : Colors.white,
+            color: theme.colorScheme.surfaceContainer,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Center(
@@ -215,12 +210,14 @@ class _BankCardState extends State<_BankCard> {
   }
 
   String _getNetwork() {
-    if (widget.card.network != null && widget.card.network!.isNotEmpty)
+    if (widget.card.network != null && widget.card.network!.isNotEmpty) {
       return widget.card.network!;
+    }
     final clean = widget.card.cardNumber.replaceAll(RegExp(r'\D'), '');
     if (RegExp(r'^5[1-5]').hasMatch(clean) ||
-        RegExp(r'^2[2-7]').hasMatch(clean))
+        RegExp(r'^2[2-7]').hasMatch(clean)) {
       return 'Mastercard';
+    }
     if (RegExp(r'^6(?:0|5|22|52|53)').hasMatch(clean)) return 'RuPay';
     return 'Visa';
   }
@@ -260,54 +257,15 @@ class _BankCardState extends State<_BankCard> {
             height: cardHeight,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              gradient: LinearGradient(
-                colors: [palette.from, palette.via, palette.to],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black45,
-                  blurRadius: 28,
-                  offset: Offset(0, 20),
-                ),
-              ],
+              color: palette.base(context),
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Stack(
-                children: [
-                  // Glows
-                  Positioned(
-                    top: -80,
-                    right: -50,
-                    child: Container(
-                      width: 200,
-                      height: 200,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: palette.glow1.withValues(alpha: 0.18),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: -70,
-                    left: -40,
-                    child: Container(
-                      width: 160,
-                      height: 160,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: palette.glow2.withValues(alpha: 0.12),
-                      ),
-                    ),
-                  ),
-                  // Content
-                  Padding(
-                    padding: EdgeInsets.all(cardWidth * 0.06),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+              child: Padding(
+                padding: EdgeInsets.all(cardWidth * 0.06),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
                         // Top row
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -327,7 +285,7 @@ class _BankCardState extends State<_BankCard> {
                                     child: Text(
                                       widget.card.bankName.toUpperCase(),
                                       style: TextStyle(
-                                        color: Colors.white,
+                                        color: palette.onBase(context),
                                         fontWeight: FontWeight.w700,
                                         letterSpacing: 1.2,
                                         fontSize: cardWidth * 0.038,
@@ -375,18 +333,18 @@ class _BankCardState extends State<_BankCard> {
                                     vertical: 4,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withValues(alpha: 0.25),
+                                    color: palette.onBase(context).withValues(alpha: 0.25),
                                     borderRadius: BorderRadius.circular(20),
                                     border: Border.all(
-                                      color: Colors.white.withValues(
+                                      color: palette.onBase(context).withValues(
                                         alpha: 0.5,
                                       ),
                                     ),
                                   ),
                                   child: Text(
-                                    '${widget.card.type.toUpperCase() ?? 'DEBIT'} CARD',
+                                    '${widget.card.type.toUpperCase()} CARD',
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color: palette.onBase(context),
                                       fontWeight: FontWeight.w800,
                                       letterSpacing: 2,
                                       fontSize: cardWidth * 0.026,
@@ -401,7 +359,7 @@ class _BankCardState extends State<_BankCard> {
                                 Text(
                                   'DUE AMOUNT',
                                   style: TextStyle(
-                                    color: Colors.white70,
+                                    color: palette.onBase(context).withValues(alpha: 0.7),
                                     fontSize: cardWidth * 0.02,
                                     letterSpacing: 1,
                                   ),
@@ -409,7 +367,7 @@ class _BankCardState extends State<_BankCard> {
                                 Text(
                                   '₹ ${widget.totalDue.toStringAsFixed(2)}',
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: palette.onBase(context),
                                     fontWeight: FontWeight.w900,
                                     letterSpacing: 0.5,
                                     fontSize: cardWidth * 0.045,
@@ -425,16 +383,9 @@ class _BankCardState extends State<_BankCard> {
                             Text(
                               displayNumber,
                               style: TextStyle(
-                                color: Colors.white,
+                                color: palette.onBase(context),
                                 fontSize: cardWidth * 0.058,
                                 letterSpacing: cardWidth * 0.012,
-                                shadows: const [
-                                  Shadow(
-                                    color: Colors.black54,
-                                    offset: Offset(0, 2),
-                                    blurRadius: 6,
-                                  ),
-                                ],
                               ),
                             ),
                             const SizedBox(width: 6),
@@ -442,7 +393,7 @@ class _BankCardState extends State<_BankCard> {
                               onTap: () => _copy(widget.card.cardNumber),
                               child: Icon(
                                 Icons.copy,
-                                color: Colors.white60,
+                                color: palette.onBase(context).withValues(alpha: 0.6),
                                 size: cardWidth * 0.045,
                               ),
                             ),
@@ -461,7 +412,7 @@ class _BankCardState extends State<_BankCard> {
                                   Text(
                                     'CARD HOLDER',
                                     style: TextStyle(
-                                      color: Colors.white70,
+                                      color: palette.onBase(context).withValues(alpha: 0.7),
                                       fontSize: cardWidth * 0.023,
                                       letterSpacing: 1,
                                     ),
@@ -475,7 +426,7 @@ class _BankCardState extends State<_BankCard> {
                                                   : 'CARD HOLDER')
                                               .toUpperCase(),
                                           style: TextStyle(
-                                            color: Colors.white,
+                                            color: palette.onBase(context),
                                             fontWeight: FontWeight.w700,
                                             fontSize: cardWidth * 0.034,
                                             letterSpacing: 1,
@@ -490,7 +441,7 @@ class _BankCardState extends State<_BankCard> {
                                             _copy(widget.card.holderName),
                                         child: Icon(
                                           Icons.copy,
-                                          color: Colors.white60,
+                                          color: palette.onBase(context).withValues(alpha: 0.6),
                                           size: cardWidth * 0.045,
                                         ),
                                       ),
@@ -507,7 +458,7 @@ class _BankCardState extends State<_BankCard> {
                                   Text(
                                     'EXPIRES',
                                     style: TextStyle(
-                                      color: Colors.white70,
+                                      color: palette.onBase(context).withValues(alpha: 0.7),
                                       fontSize: cardWidth * 0.023,
                                       letterSpacing: 1,
                                     ),
@@ -519,7 +470,7 @@ class _BankCardState extends State<_BankCard> {
                                             ? widget.card.expiry
                                             : 'MM/YY',
                                         style: TextStyle(
-                                          color: Colors.white,
+                                          color: palette.onBase(context),
                                           fontWeight: FontWeight.w700,
                                           fontSize: cardWidth * 0.034,
                                           letterSpacing: 1,
@@ -530,7 +481,7 @@ class _BankCardState extends State<_BankCard> {
                                         onTap: () => _copy(widget.card.expiry),
                                         child: Icon(
                                           Icons.copy,
-                                          color: Colors.white60,
+                                          color: palette.onBase(context).withValues(alpha: 0.6),
                                           size: cardWidth * 0.045,
                                         ),
                                       ),
@@ -566,8 +517,6 @@ class _BankCardState extends State<_BankCard> {
                       ],
                     ),
                   ),
-                ],
-              ),
             ),
           ),
         ),
@@ -578,41 +527,19 @@ class _BankCardState extends State<_BankCard> {
             children: [
               Expanded(
                 flex: 1,
-                child: FilledButton.icon(
+                child: FilledButton.tonalIcon(
                   onPressed: () => _copy(widget.card.cvv),
                   icon: const Icon(Icons.copy, size: 18),
                   label: const Text('CVV'),
-                  style: FilledButton.styleFrom(
-                    backgroundColor: Theme.of(
-                      context,
-                    ).colorScheme.secondaryContainer,
-                    foregroundColor: Theme.of(
-                      context,
-                    ).colorScheme.onSecondaryContainer,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
                 ),
               ),
               const SizedBox(width: 8),
               Expanded(
                 flex: 2,
-                child: FilledButton.icon(
+                child: FilledButton.tonalIcon(
                   onPressed: widget.onPress,
                   icon: const Icon(Icons.history, size: 18),
                   label: const Text('Transactions'),
-                  style: FilledButton.styleFrom(
-                    backgroundColor: Theme.of(
-                      context,
-                    ).colorScheme.secondaryContainer,
-                    foregroundColor: Theme.of(
-                      context,
-                    ).colorScheme.onSecondaryContainer,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
                 ),
               ),
             ],

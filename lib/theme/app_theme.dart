@@ -82,83 +82,59 @@ class AppTheme {
     );
   }
 
-  static ThemeData get lightTheme {
-    final base = ThemeData(
-      useMaterial3: true,
-      brightness: Brightness.light,
-      colorScheme: const ColorScheme.light(
-        primary: Color(0xFF202020),
-        onPrimary: Color(0xFFFFFFFF),
-        primaryContainer: Color(0xFFAAEF00),
-        onPrimaryContainer: Color(0xFF202020),
-        secondary: Color(0xFF202020),
-        onSecondary: Color(0xFFFFFFFF),
-        secondaryContainer: Color(0xFFF2F3F5),
-        onSecondaryContainer: Color(0xFF202020),
-        tertiary: Color(0xFFAAEF00),
-        onTertiary: Color(0xFF202020),
-        tertiaryContainer: Color(0xFFAAEF00),
-        onTertiaryContainer: Color(0xFF202020),
-        error: Color(0xFFFF4D4F),
-        onError: Color(0xFFFFFFFF),
-        errorContainer: Color(0xFFFFDAD6),
-        onErrorContainer: Color(0xFF410002),
-        surface: Color(0xFFFFFFFF),
-        onSurface: Color(0xFF202020),
-        surfaceContainerHighest: Color(0xFFFFFFFF),
-        onSurfaceVariant: Color(0xFF7A7A7A),
-        outline: Color(0xFFEAEAEA),
-        outlineVariant: Color(0xFFEFEFEF),
-      ),
-    );
-
-    return base.copyWith(
-      textTheme: _buildTextTheme(base.textTheme),
-      cardTheme: const CardThemeData(
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
-        ),
-      ),
-    );
+  static ThemeData lightTheme(ColorScheme? dynamicColorScheme) {
+    return _buildTheme(Brightness.light, dynamicColorScheme);
   }
 
-  static ThemeData get darkTheme {
+  static ThemeData darkTheme(ColorScheme? dynamicColorScheme) {
+    return _buildTheme(Brightness.dark, dynamicColorScheme);
+  }
+
+  static ThemeData _buildTheme(Brightness brightness, ColorScheme? colorScheme) {
     final base = ThemeData(
       useMaterial3: true,
-      brightness: Brightness.dark,
-      colorScheme: const ColorScheme.dark(
-        primary: Color(0xFFAAEF00),
-        onPrimary: Color(0xFF202020),
-        primaryContainer: Color(0xFFAAEF00),
-        onPrimaryContainer: Color(0xFF202020),
-        secondary: Color(0xFFAAEF00),
-        onSecondary: Color(0xFF202020),
-        secondaryContainer: Color(0xFF202020),
-        onSecondaryContainer: Color(0xFFFFFFFF),
-        tertiary: Color(0xFFAAEF00),
-        onTertiary: Color(0xFF202020),
-        tertiaryContainer: Color(0xFF202020),
-        onTertiaryContainer: Color(0xFFFFFFFF),
-        error: Color(0xFFFF5A5F),
-        onError: Color(0xFFFFFFFF),
-        errorContainer: Color(0xFF93000A),
-        onErrorContainer: Color(0xFFFFDAD6),
-        surface: Color(0xFF1A1A1A),
-        onSurface: Color(0xFFFFFFFF),
-        surfaceContainerHighest: Color(0xFF202020),
-        onSurfaceVariant: Color(0xFFA1A1A1),
-        outline: Color(0xFF2A2A2A),
-        outlineVariant: Color(0xFF303030),
-      ),
+      brightness: brightness,
+      colorScheme: colorScheme,
     );
 
     return base.copyWith(
       textTheme: _buildTextTheme(base.textTheme),
-      cardTheme: const CardThemeData(
+      cardTheme: CardThemeData(
         elevation: 0,
+        color: base.colorScheme.surfaceContainerHighest,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16)),
+        ),
+        margin: const EdgeInsets.only(bottom: 12),
+      ),
+      listTileTheme: ListTileThemeData(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16)),
+        ),
+        tileColor: base.colorScheme.surfaceContainerHighest,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        filled: true,
+        fillColor: base.colorScheme.surfaceContainerHighest,
+      ),
+      dialogTheme: DialogThemeData(
+        backgroundColor: base.colorScheme.surface,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
+          borderRadius: BorderRadius.circular(28),
+        ),
+      ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          backgroundColor: base.colorScheme.primaryContainer,
+          foregroundColor: base.colorScheme.onPrimaryContainer,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          textStyle: const TextStyle(fontWeight: FontWeight.w800),
         ),
       ),
     );
