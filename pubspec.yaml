@@ -32,4 +32,44 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
-    - assets/bank-logos/
+    - assets/bank-logos/airp/
+    - assets/bank-logos/aubl/
+    - assets/bank-logos/barb/
+    - assets/bank-logos/bdbl/
+    - assets/bank-logos/bkid/
+    - assets/bank-logos/cbin/
+    - assets/bank-logos/ciub/
+    - assets/bank-logos/cnrb/
+    - assets/bank-logos/csbk/
+    - assets/bank-logos/dcbl/
+    - assets/bank-logos/dlxb/
+    - assets/bank-logos/esmf/
+    - assets/bank-logos/fdrl/
+    - assets/bank-logos/hdfc/
+    - assets/bank-logos/ibkl/
+    - assets/bank-logos/icic/
+    - assets/bank-logos/idfb/
+    - assets/bank-logos/idib/
+    - assets/bank-logos/indb/
+    - assets/bank-logos/ioba/
+    - assets/bank-logos/jaka/
+    - assets/bank-logos/jiop/
+    - assets/bank-logos/karb/
+    - assets/bank-logos/kkbk/
+    - assets/bank-logos/kvbl/
+    - assets/bank-logos/mahb/
+    - assets/bank-logos/ntbl/
+    - assets/bank-logos/psib/
+    - assets/bank-logos/punb/
+    - assets/bank-logos/pytm/
+    - assets/bank-logos/ratn/
+    - assets/bank-logos/sbin/
+    - assets/bank-logos/scbl/
+    - assets/bank-logos/sibl/
+    - assets/bank-logos/slice/
+    - assets/bank-logos/tmbl/
+    - assets/bank-logos/ubin/
+    - assets/bank-logos/ucba/
+    - assets/bank-logos/ujvn/
+    - assets/bank-logos/utib/
+    - assets/bank-logos/yesb/

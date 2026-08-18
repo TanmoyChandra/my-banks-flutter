@@ -6,6 +6,7 @@ import '../../providers/wallet_provider.dart';
 import '../../models/types.dart';
 import '../../constants/banks.dart';
 import '../../constants/card_colors.dart';
+import '../../widgets/bank_picker.dart';
 
 class SetupCardsScreen extends StatefulWidget {
   const SetupCardsScreen({super.key});
@@ -121,46 +122,9 @@ class _SetupCardsScreenState extends State<SetupCardsScreen> {
   }
 
   void _showBankPicker() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (context) => SizedBox(
-        height: MediaQuery.of(context).size.height * 0.7,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'Select Bank',
-                style: Theme.of(
-                  context,
-                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-              ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: banks.length,
-                itemBuilder: (context, index) {
-                  final bank = banks[index];
-                  return ListTile(
-                    leading: Image.asset(bank.symbol, width: 32, height: 32),
-                    title: Text(bank.name),
-                    onTap: () {
-                      setState(() => _bankName = bank.name);
-                      Navigator.pop(context);
-                    },
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+    BankPicker.show(context, onSelect: (name) {
+      setState(() => _bankName = name);
+    });
   }
 
   Widget _buildNetworkBtn(String key, String label, String logoPath) {
