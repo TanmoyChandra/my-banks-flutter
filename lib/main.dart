@@ -24,10 +24,10 @@ class MyBanksApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UiProvider>(
-      builder: (context, uiProvider, child) {
-        return DynamicColorBuilder(
-          builder: (lightDynamic, darkDynamic) {
+    return DynamicColorBuilder(
+      builder: (lightDynamic, darkDynamic) {
+        return Consumer<UiProvider>(
+          builder: (context, uiProvider, child) {
             return MaterialApp.router(
               title: 'My Banks',
               theme: AppTheme.lightTheme(lightDynamic),
