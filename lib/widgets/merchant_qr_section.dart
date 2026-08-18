@@ -7,6 +7,14 @@ class MerchantQRSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text('Merchant QR Section'));
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+      child: Center(
+        child: Text(
+          'Merchant QR Section\n(Coming Soon)',
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
   }
 }

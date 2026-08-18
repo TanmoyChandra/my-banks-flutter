@@ -102,14 +102,9 @@ class _QRSectionState extends State<QRSection>
         ],
         bottom: TabBar(
           controller: _tabController,
-          indicator: BoxDecoration(
-            color: theme.colorScheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          indicatorSize: TabBarIndicatorSize.tab,
-          dividerColor: Colors.transparent,
-          labelColor: theme.colorScheme.onSurface,
+          labelColor: theme.colorScheme.primary,
           unselectedLabelColor: theme.colorScheme.onSurfaceVariant,
+          indicatorSize: TabBarIndicatorSize.tab,
           labelStyle: theme.textTheme.labelLarge?.copyWith(
             fontWeight: FontWeight.w700,
           ),
@@ -173,16 +168,17 @@ class _MyQRCodes extends StatelessWidget {
 
     return ListView.builder(
       scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.only(left: 24, right: 12),
+      padding: const EdgeInsets.only(left: 24, right: 12, top: 16, bottom: 32),
       itemCount: entries.length + 1,
       itemBuilder: (context, index) {
         if (index == entries.length) {
           // Add new placeholder
-          return SizedBox(
-            width: cardWidth,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 12.0),
-              child: Card(
+          return Center(
+            child: SizedBox(
+              width: cardWidth,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 12.0),
+                child: Card(
                 margin: EdgeInsets.zero,
                 child: InkWell(
                   onTap: () => context.push('/main/setup-qr'),
@@ -214,11 +210,14 @@ class _MyQRCodes extends StatelessWidget {
                 ),
               ),
             ),
-          );
+          ),
+        );
         }
-        return Padding(
-          padding: const EdgeInsets.only(right: 12.0),
-          child: _QRPayCard(entry: entries[index], width: cardWidth),
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.only(right: 12.0),
+            child: _QRPayCard(entry: entries[index], width: cardWidth),
+          ),
         );
       },
     );
