@@ -76,28 +76,23 @@ class CardsSection extends StatelessWidget {
                 bottom: 96,
                 top: 16,
               ),
-              itemCount: cards.length + 1,
+              itemCount: cards.length,
+              footer: _buildAddCardButton(
+                context,
+                key: const ValueKey('add_card_btn'),
+              ),
               onReorder: (oldIndex, newIndex) {
-                if (oldIndex < cards.length && newIndex < cards.length) {
-                  if (newIndex > oldIndex) {
-                    newIndex -= 1;
-                  }
-                  final newCards = List<CardEntry>.from(cards);
-                  final item = newCards.removeAt(oldIndex);
-                  newCards.insert(newIndex, item);
-                  walletProvider.reorderCards(
-                    newCards.map((c) => c.id).toList(),
-                  );
+                if (newIndex > oldIndex) {
+                  newIndex -= 1;
                 }
+                final newCards = List<CardEntry>.from(cards);
+                final item = newCards.removeAt(oldIndex);
+                newCards.insert(newIndex, item);
+                walletProvider.reorderCards(
+                  newCards.map((c) => c.id).toList(),
+                );
               },
               itemBuilder: (context, index) {
-                if (index == cards.length) {
-                  return _buildAddCardButton(
-                    context,
-                    key: const ValueKey('add_card_btn'),
-                  );
-                }
-
                 final card = cards[index];
                 final cardTxs = transactions.where((t) => t.cardId == card.id);
                 final totalDue = cardTxs.fold(
@@ -110,6 +105,7 @@ class CardsSection extends StatelessWidget {
                   key: ValueKey(card.id),
                   padding: const EdgeInsets.only(bottom: 24),
                   child: _BankCard(
+                    index: index,
                     card: card,
                     totalDue: totalDue,
                     onPress: () {
@@ -171,11 +167,13 @@ class CardsSection extends StatelessWidget {
 }
 
 class _BankCard extends StatefulWidget {
+  final int index;
   final CardEntry card;
   final double totalDue;
   final VoidCallback onPress;
 
   const _BankCard({
+    required this.index,
     required this.card,
     required this.totalDue,
     required this.onPress,
@@ -533,6 +531,21 @@ class _BankCardState extends State<_BankCard> {
                   onPressed: widget.onPress,
                   icon: const Icon(Icons.history, size: 18),
                   label: const Text('Transactions'),
+                ),
+              ),
+              const SizedBox(width: 8),
+              ReorderableDragStartListener(
+                index: widget.index,
+                child: Container(
+                  height: 40,
+                  width: 48,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Center(
+                    child: Icon(Icons.drag_indicator, size: 20),
+                  ),
                 ),
               ),
             ],
