@@ -423,10 +423,7 @@ class _SettingsSectionState extends State<SettingsSection>
         ],
       ),
       body: ListView(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 16,
-              ).copyWith(bottom: 96),
+              padding: const EdgeInsets.only(bottom: 96),
               children: [
                 _SectionLabel(label: 'PROFILE'),
                 _SetupCard(
@@ -481,33 +478,27 @@ class _SettingsSectionState extends State<SettingsSection>
 
                 const SizedBox(height: 12),
                 _SectionLabel(label: 'SECURITY'),
-                Card(
-                  child: ListTile(
-                    leading: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.primaryContainer,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Icon(Icons.fingerprint, color: theme.colorScheme.onPrimaryContainer),
-                    ),
-                    title: const Text(
-                      'App Lock',
-                      style: TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                    subtitle: const Text(
-                      'Require fingerprint or PIN to open',
-                      style: TextStyle(fontSize: 12),
-                    ),
-                    trailing: Switch(
-                      value: uiProvider.isAppLockEnabled,
-                      onChanged: (val) => _toggleAppLock(context, uiProvider),
-                      activeThumbColor: theme.colorScheme.primaryContainer,
-                    ),
+                SwitchListTile(
+                  secondary: Icon(Icons.fingerprint, color: theme.colorScheme.primary),
+                  title: const Text('App Lock', style: TextStyle(fontWeight: FontWeight.w600)),
+                  subtitle: const Text('Require fingerprint or PIN to open'),
+                  value: uiProvider.isAppLockEnabled,
+                  onChanged: (val) => _toggleAppLock(context, uiProvider),
+                ),
+                SwitchListTile(
+                  secondary: Icon(Icons.chat_bubble_outline, color: theme.colorScheme.primary),
+                  title: const Text('Floating Bubble', style: TextStyle(fontWeight: FontWeight.w600)),
+                  subtitle: const Text('Quick Add Transaction anywhere'),
+                  value: uiProvider.isFloatingBubbleEnabled,
+                  onChanged: (val) => uiProvider.toggleFloatingBubble(
+                    val,
+                    bgColor: theme.colorScheme.primaryContainer,
+                    fgColor: theme.colorScheme.onPrimaryContainer,
                   ),
                 ),
-                Card(
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(24),
                     side: BorderSide(color: theme.colorScheme.outlineVariant),
@@ -575,8 +566,9 @@ class _SettingsSectionState extends State<SettingsSection>
                   ),
                 ),
               ),
+            ),
 
-                const SizedBox(height: 24),
+            const SizedBox(height: 24),
                 Text(
                   'Made with ❤️ by Tanmoy Chandra',
                   textAlign: TextAlign.center,
@@ -611,14 +603,13 @@ class _SectionLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 4, bottom: 8),
+      padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
       child: Text(
         label,
         style: TextStyle(
-          color: Theme.of(context).colorScheme.onSurfaceVariant,
-          fontSize: 11,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 1.2,
+          color: Theme.of(context).colorScheme.primary,
+          fontWeight: FontWeight.bold,
+          fontSize: 14,
         ),
       ),
     );
@@ -640,25 +631,11 @@ class _SetupCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        onTap: onPress,
-        leading: Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primaryContainer,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Icon(icon, color: Theme.of(context).colorScheme.onPrimaryContainer),
-        ),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
-        subtitle: Text(subtitle, style: const TextStyle(fontSize: 12)),
-        trailing: Icon(
-          Icons.chevron_right,
-          color: Theme.of(context).colorScheme.onSurfaceVariant,
-        ),
-      ),
+    return ListTile(
+      onTap: onPress,
+      leading: Icon(icon, color: Theme.of(context).colorScheme.onSurfaceVariant),
+      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
+      subtitle: Text(subtitle),
     );
   }
 }

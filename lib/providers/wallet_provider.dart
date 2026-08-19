@@ -15,6 +15,7 @@ class WalletProvider extends ChangeNotifier {
   List<MerchantQR> _merchantQRs = [];
   List<String> _payees = ['Me'];
   List<BillingCycle> _billingCycles = [];
+  bool _isLoading = true;
 
   List<QREntry> get upis => _upis;
   List<CardEntry> get cards => _cards;
@@ -23,14 +24,18 @@ class WalletProvider extends ChangeNotifier {
   List<MerchantQR> get merchantQRs => _merchantQRs;
   List<String> get payees => _payees;
   List<BillingCycle> get billingCycles => _billingCycles;
+  bool get isLoading => _isLoading;
 
   WalletProvider() {
-    _loadFromPrefs();
+    loadFromPrefs();
   }
 
   String _generateId() => "${DateTime.now().millisecondsSinceEpoch}-${_uuid.v4().substring(0, 8)}";
 
-  Future<void> _loadFromPrefs() async {
+  Future<void> loadFromPrefs() async {
+    _isLoading = true;
+    notifyListeners();
+
     final prefs = await SharedPreferences.getInstance();
     final encryptedData = prefs.getString('mybanks-wallet');
     if (encryptedData != null) {
@@ -46,12 +51,14 @@ class WalletProvider extends ChangeNotifier {
           _merchantQRs = (state['merchantQRs'] as List?)?.map((e) => MerchantQR.fromJson(e)).toList() ?? [];
           _payees = (state['payees'] as List?)?.map((e) => e.toString()).toList() ?? ['Me'];
           _billingCycles = (state['billingCycles'] as List?)?.map((e) => BillingCycle.fromJson(e)).toList() ?? [];
-          notifyListeners();
         }
       } catch (e) {
         // print("Failed to parse wallet state");
       }
     }
+    
+    _isLoading = false;
+    notifyListeners();
   }
 
   Future<void> _saveToPrefs() async {

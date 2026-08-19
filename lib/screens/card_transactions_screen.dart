@@ -410,12 +410,12 @@ class _CardTransactionsScreenState extends State<CardTransactionsScreen> {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: isCredit ? theme.colorScheme.tertiaryContainer : theme.colorScheme.errorContainer,
+                color: Color.lerp(theme.colorScheme.primaryContainer, isCredit ? Colors.green : Colors.red, 0.15),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
                 isCredit ? Icons.arrow_downward : Icons.arrow_upward,
-                color: isCredit ? theme.colorScheme.onTertiaryContainer : theme.colorScheme.onErrorContainer,
+                color: Color.lerp(theme.colorScheme.primary, isCredit ? Colors.green : Colors.red, 0.6),
               ),
             ),
             title: Text(
@@ -435,7 +435,7 @@ class _CardTransactionsScreenState extends State<CardTransactionsScreen> {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
-                    color: isCredit ? theme.colorScheme.tertiary : theme.colorScheme.onSurface,
+                    color: Color.lerp(theme.colorScheme.onSurface, isCredit ? Colors.green : Colors.red, 0.6),
                   ),
                 ),
                 const SizedBox(height: 4),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import '../providers/wallet_provider.dart';
 // Placeholder imports for tabs
 import '../widgets/qr_section.dart';
 import '../widgets/cards_section.dart';
@@ -27,6 +28,15 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final walletProvider = context.watch<WalletProvider>();
+    if (walletProvider.isLoading) {
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     return Scaffold(
       body: _SmoothIndexedStack(
         index: _currentIndex,
