@@ -100,7 +100,7 @@ class _QuickAddTransactionFormState extends State<QuickAddTransactionForm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           DropdownButtonFormField<String>(
-            value: _selectedCardId,
+            initialValue: _selectedCardId,
             decoration: const InputDecoration(labelText: 'Card'),
             items: cards.map((c) => DropdownMenuItem(
               value: c.id,

@@ -312,7 +312,7 @@ class _CardTransactionsScreenState extends State<CardTransactionsScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           scrollDirection: Axis.horizontal,
           itemCount: _filters.length,
-          separatorBuilder: (_, __) => const SizedBox(width: 8),
+          separatorBuilder: (_, _) => const SizedBox(width: 8),
           itemBuilder: (context, index) {
             final isSelected = _selectedFilterIndex == index;
             return ChoiceChip(

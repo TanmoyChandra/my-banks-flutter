@@ -269,9 +269,7 @@ class _QRPayCardState extends State<_QRPayCard> {
                 ? widget.entry.bankName
                 : widget.entry.upiId);
 
-      await Share.shareXFiles([
-        XFile(file.path),
-      ], subject: 'Share $title QR Code');
+      await Share.shareXFiles([XFile(file.path)], subject: 'Share $title QR Code');
     } catch (e) {
       // print('Error sharing QR: $e');
     }
@@ -324,7 +322,14 @@ class _QRPayCardState extends State<_QRPayCard> {
                     data: upiLink,
                     size: qrSize,
                     backgroundColor: Colors.transparent,
-                    foregroundColor: theme.colorScheme.onSurface,
+                    eyeStyle: QrEyeStyle(
+                      eyeShape: QrEyeShape.square,
+                      color: theme.colorScheme.onSurface,
+                    ),
+                    dataModuleStyle: QrDataModuleStyle(
+                      dataModuleShape: QrDataModuleShape.square,
+                      color: theme.colorScheme.onSurface,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(

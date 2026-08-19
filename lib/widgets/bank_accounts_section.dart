@@ -8,7 +8,7 @@ import '../providers/ui_provider.dart';
 import '../providers/wallet_provider.dart';
 import '../models/types.dart';
 import '../constants/banks.dart';
-import '../constants/card_colors.dart';
+
 
 class BankAccountsSection extends StatelessWidget {
   const BankAccountsSection({super.key});
@@ -121,10 +121,7 @@ class _AccountItem extends StatefulWidget {
   State<_AccountItem> createState() => _AccountItemState();
 }
 
-class _AccountItemState extends State<_AccountItem>
-    with SingleTickerProviderStateMixin {
-  bool _expanded = false;
-
+class _AccountItemState extends State<_AccountItem> {
   Future<void> _handleCopy(String text) async {
     if (text.isEmpty) return;
     await Clipboard.setData(ClipboardData(text: text));
@@ -154,230 +151,94 @@ class _AccountItemState extends State<_AccountItem>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final bank = findBankByName(widget.account.bankName);
-    final palette = getCardColors(widget.account.color);
-    final cardBg = palette.base(context);
-    final textCol = palette.onBase(context);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: GestureDetector(
-        onTap: () => setState(() => _expanded = !_expanded),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 320),
-          curve: Curves.easeInOut,
-          decoration: BoxDecoration(
-            color: cardBg,
-            borderRadius: BorderRadius.circular(24),
-          ),
-          padding: const EdgeInsets.all(20),
-          child: Stack(
-            children: [
-              Positioned(
-                right: -35,
-                top: -35,
-                child: Container(
-                  width: 140,
-                  height: 140,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: textCol.withValues(alpha: 0.07),
+    return Card(
+      elevation: 0,
+      color: theme.colorScheme.surfaceContainerHighest,
+      clipBehavior: Clip.antiAlias,
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: ExpansionTile(
+        shape: const Border(),
+        leading: CircleAvatar(
+          backgroundColor: theme.colorScheme.surface,
+          child: bank != null
+              ? Image.asset(bank.symbol, width: 24, height: 24)
+              : Text(
+                  widget.account.bankName.substring(0, 2).toUpperCase(),
+                  style: TextStyle(
+                    color: theme.colorScheme.primary,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
-              Positioned(
-                right: 50,
-                top: 15,
-                child: Container(
-                  width: 90,
-                  height: 90,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: textCol.withValues(alpha: 0.05),
-                  ),
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Header Row
-                  Row(
-                    children: [
-                      Container(
-                        width: 44,
-                        height: 44,
-                        decoration: BoxDecoration(
-                          color: textCol.withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        alignment: Alignment.center,
-                        margin: const EdgeInsets.only(right: 12),
-                        child: bank != null
-                            ? Image.asset(
-                                bank.symbol,
-                                width: 28,
-                                height: 28,
-                                fit: BoxFit.contain,
-                              )
-                            : Text(
-                                widget.account.bankName
-                                    .substring(0, 2)
-                                    .toUpperCase(),
-                                style: TextStyle(
-                                  color: textCol,
-                                  fontWeight: FontWeight.w900,
-                                  fontSize: 14,
-                                ),
-                              ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.account.bankName,
-                              style: TextStyle(
-                                color: textCol,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 16,
-                              ),
-                            ),
-                            const SizedBox(height: 6),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 3,
-                              ),
-                              decoration: BoxDecoration(
-                                color: textCol.withValues(alpha: 0.25),
-                                border: Border.all(
-                                  color: textCol.withValues(alpha: 0.5),
-                                ),
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: Text(
-                                '${widget.account.accountType.toUpperCase()} ACCOUNT',
-                                style: TextStyle(
-                                  color: textCol,
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 10,
-                                  letterSpacing: 1.5,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.share_outlined),
-                        color: textCol.withValues(alpha: 0.54),
-                        onPressed: _handleShare,
-                      ),
-                    ],
-                  ),
-
-                  AnimatedCrossFade(
-                    duration: const Duration(milliseconds: 320),
-                    crossFadeState: _expanded
-                        ? CrossFadeState.showSecond
-                        : CrossFadeState.showFirst,
-                    firstChild: Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Account Number',
-                            style: TextStyle(
-                              color: textCol.withValues(alpha: 0.54),
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Text(
-                            _formatAccountNumber(widget.account.accountNumber),
-                            style: TextStyle(
-                              color: textCol,
-                              fontSize: 19,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 2,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    secondChild: Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: 1,
-                            color: textCol.withValues(alpha: 0.12),
-                            margin: const EdgeInsets.only(bottom: 16),
-                          ),
-                          _buildInfoRow(
-                            'ACCOUNT HOLDER',
-                            widget.account.accountHolder,
-                            () => _handleCopy(widget.account.accountHolder),
-                            textCol,
-                          ),
-                          _buildInfoRow(
-                            'ACCOUNT NUMBER',
-                            _formatAccountNumber(widget.account.accountNumber),
-                            () => _handleCopy(widget.account.accountNumber),
-                            textCol,
-                          ),
-                          _buildInfoRow(
-                            'IFSC CODE',
-                            widget.account.ifsc.toUpperCase(),
-                            () => _handleCopy(widget.account.ifsc),
-                            textCol,
-                          ),
-                          _buildInfoRow(
-                            'BRANCH',
-                            widget.account.branchName,
-                            () => _handleCopy(widget.account.branchName),
-                            textCol,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
         ),
+        title: Text(
+          widget.account.bankName,
+          style: const TextStyle(fontWeight: FontWeight.w600),
+        ),
+        subtitle: Text(
+          '${widget.account.accountType.toUpperCase()} • ${_formatAccountNumber(widget.account.accountNumber)}',
+        ),
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildInfoRow('ACCOUNT HOLDER', widget.account.accountHolder, () => _handleCopy(widget.account.accountHolder), theme),
+                _buildInfoRow('ACCOUNT NUMBER', _formatAccountNumber(widget.account.accountNumber), () => _handleCopy(widget.account.accountNumber), theme),
+                _buildInfoRow('IFSC CODE', widget.account.ifsc.toUpperCase(), () => _handleCopy(widget.account.ifsc), theme),
+                _buildInfoRow('BRANCH', widget.account.branchName, () => _handleCopy(widget.account.branchName), theme),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  child: FilledButton.tonalIcon(
+                    onPressed: _handleShare,
+                    icon: const Icon(Icons.share_outlined, size: 18),
+                    label: const Text('Share Details'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildInfoRow(String label, String value, VoidCallback onCopy, Color textCol) {
+  Widget _buildInfoRow(String label, String value, VoidCallback onCopy, ThemeData theme) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: GestureDetector(
         onTap: onCopy,
-        child: Column(
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              label,
-              style: TextStyle(
-                color: textCol.withValues(alpha: 0.54),
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: TextStyle(
+                      color: theme.colorScheme.onSurfaceVariant,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    value.isNotEmpty ? value : 'Not provided',
+                    style: TextStyle(
+                      color: theme.colorScheme.onSurface,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 4),
-            Text(
-              value.isNotEmpty ? value : 'Not provided',
-              style: TextStyle(
-                color: textCol,
-                fontSize: 15,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
+            Icon(Icons.copy, size: 16, color: theme.colorScheme.onSurfaceVariant),
           ],
         ),
       ),

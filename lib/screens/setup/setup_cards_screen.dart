@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../providers/wallet_provider.dart';
 import '../../models/types.dart';
-import '../../constants/banks.dart';
+
 import '../../constants/card_colors.dart';
 import '../../widgets/bank_picker.dart';
 
